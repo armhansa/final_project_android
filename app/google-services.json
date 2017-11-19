@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "68301320635",
+    "firebase_url": "https://cutepid-7bc10.firebaseio.com",
+    "project_id": "cutepid-7bc10",
+    "storage_bucket": "cutepid-7bc10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68301320635:android:5a94223bd3dfa2a6",
+        "android_client_info": {
+          "package_name": "com.armhansa.app.cutepid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68301320635-oiunvik0426qcbr8grrr8iehoo2ge39s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-bwKOCBF2o5nKpcYH4WA8-masXvk8gRU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
