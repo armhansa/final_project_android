@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.armhansa.app.cutepid.R;
 
@@ -30,8 +29,6 @@ public class MenuLoginFragment extends Fragment implements View.OnClickListener{
         facebookBtn.setOnClickListener(this);
         Button loginBtn = rootView.findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(this);
-        TextView registerBtn = rootView.findViewById(R.id.registerBtn);
-        registerBtn.setOnClickListener(this);
 
         return rootView;
     }
@@ -44,9 +41,6 @@ public class MenuLoginFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.loginBtn:
                 nextPageLogin();
-                break;
-            case R.id.registerBtn:
-                nextPageRegister();
                 break;
         }
     }
@@ -62,10 +56,7 @@ public class MenuLoginFragment extends Fragment implements View.OnClickListener{
     }
 
     private void nextPageRegister() {
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLoginFragment, new RegisterFragment())
-                .addToBackStack(null)
-                .commit();
+
     }
 
 }

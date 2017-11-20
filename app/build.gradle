@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:support-v4:26.1.0'
@@ -29,6 +30,13 @@ dependencies {
 
     // Add for use Firebase NoSQL Database
     compile 'com.google.firebase:firebase-database:11.6.0'
+
+    // Add for Login via Facebook
+    //noinspection GradleDependency
+    compile 'com.facebook.android:facebook-login:[4,5)'
+
+    // Gson Lib
+    compile 'com.google.code.gson:gson:2.8.1'
 }
 
 // Add for use Firebase NoSQL Database

@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    // For Login Facebook
+    <string name="facebook_app_id">132075534157288</string>
+    <string name="fb_login_protocol_scheme">fb132075534157288</string>
+
 </resources>
