@@ -1,14 +1,35 @@
 package com.armhansa.app.cutepid.model;
 
+import android.graphics.Bitmap;
+
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class User {
 
+    private String id;
     private String email;
     private String password;
     private String firstName;
     private Date birthDay;
     private String gender;
+    private String status;
+    private String profile;
+    private List<Byte> phoneProfile;
+    private int age;
+
+    private boolean facebookUser;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
@@ -40,6 +61,11 @@ public class User {
 
     public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
+        age = getDiffYears(birthDay, new Date());
+    }
+
+    public int getAge() {
+        return age;
     }
 
     public String getGender() {
@@ -48,5 +74,55 @@ public class User {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    private int getDiffYears(Date first, Date last) {
+
+        Calendar a = getCalendar(first);
+        Calendar b = getCalendar(last);
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+            diff--;
+        }
+        return diff;
+    }
+
+    public boolean isFacebookUser() {
+        return facebookUser;
+    }
+
+    public void setFacebookUser(boolean facebookUser) {
+        this.facebookUser = facebookUser;
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar cal = Calendar.getInstance(Locale.US);
+        cal.setTime(date);
+        return cal;
+    }
+
+    public List<Byte> getPhoneProfile() {
+        return phoneProfile;
+    }
+
+    public void setPhoneProfile(List<Byte> phoneProfile) {
+        this.phoneProfile = phoneProfile;
     }
 }

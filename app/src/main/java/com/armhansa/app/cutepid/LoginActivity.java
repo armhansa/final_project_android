@@ -1,19 +1,14 @@
 package com.armhansa.app.cutepid;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.armhansa.app.cutepid.controller.CommonSharePreference;
 import com.armhansa.app.cutepid.fragment_authen.MenuLoginFragment;
 import com.armhansa.app.cutepid.model.User;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +19,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         preference = new CommonSharePreference(this);
         user = (User) preference.read("User", User.class);
@@ -36,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 //                    User tmp_user = dataSnapshot.getValue(User.class);
 //                    if(tmp_user != null) {
 //                        user = tmp_user;
-            Intent goToHome = new Intent(LoginActivity.this, MainActivity.class);
+            Intent goToHome = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(goToHome);
             finish();
 //                    }

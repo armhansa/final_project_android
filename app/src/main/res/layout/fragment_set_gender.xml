@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#77FF77"
+    android:orientation="vertical"
+    android:weightSum="7"
+    android:padding="10dp"
+    tools:context="com.armhansa.app.cutepid.fragment_authen.SetGenderFragment">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:text="Your Gender"
+        android:textSize="35sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
+        android:weightSum="2"
+        android:padding="10dp">
+        <Button
+            android:id="@+id/men"
+            android:text="Men"
+            android:background="#9999FF"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/women"
+            android:text="Women"
+            android:background="#FFFFFF"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
+
+    <Button
+        android:id="@+id/phoneLoginBtn"
+        android:text="Login"
+        android:textColor="#FFF"
+        android:textSize="30sp"
+        android:background="#FF5555"
+        android:layout_width="150dp"
+        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>
