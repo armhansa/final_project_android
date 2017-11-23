@@ -65,11 +65,13 @@ public class SetPasswordFragment extends Fragment implements View.OnClickListene
                 Toast.makeText(getActivity(), "Invalid Password, please try again.", Toast.LENGTH_LONG).show();
             }
         } else {
+//            Invalidation
+
+            // Set Value
+            LoginActivity.user.setPassword(password.getText().toString());
+
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("users").child(LoginActivity.user.getId()).setValue(LoginActivity.user);
-            mDatabase.child("test").setValue("Test");
-
-            Toast.makeText(getActivity(), "Set User to firebase.", Toast.LENGTH_LONG).show();
 
             login();
 

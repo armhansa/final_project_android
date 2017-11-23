@@ -24,13 +24,15 @@ public class ChatAdapter extends RecyclerView.Adapter<Holder> {
 
     private List<User> users;
 
-    private HashMap<Integer, byte[]> phoneImage;
+    private Context context;
 
     public ChatAdapter() {
 
     }
 
-    private Context context;
+    public ChatAdapter(Context context) {
+        this.context = context;
+    }
 
     public interface ChatListener {
         void onClickInItem(int position);
@@ -51,11 +53,6 @@ public class ChatAdapter extends RecyclerView.Adapter<Holder> {
     }
 
 
-
-    public ChatAdapter(Context context) {
-        this.context = context;
-        phoneImage = new HashMap<>();
-    }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -80,26 +77,11 @@ public class ChatAdapter extends RecyclerView.Adapter<Holder> {
             }
         });
 
-        if(users.get(position).isFacebookUser()) {
-            Glide.with(context)
-                    .load(users.get(position).getProfile())
-                    .centerCrop()
-                    .into(profileImage);
 
-        } else {
-
-
-            if(phoneImage.get(position) == null) {
-                phoneImage.put(position, getByteArray(users.get(position).getProfile()));
-            }
-
-            Glide.with(context)
-                    .load(phoneImage.get(position))
-                    .asBitmap()
-                    .centerCrop()
-                    .into(profileImage);
-        }
-
+        Glide.with(context)
+                .load(users.get(position).getProfile())
+                .centerCrop()
+                .into(profileImage);
         firstName.setText(String.format("%s, %d", users.get(position).getFirstName(), users.get(position).getAge()));
         status.setText(users.get(position).getStatus());
 

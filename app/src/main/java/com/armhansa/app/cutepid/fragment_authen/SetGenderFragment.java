@@ -31,7 +31,7 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
     Button menBtn;
     Button womenBtn;
 
-    Button phoneLoginBtn;
+    Button nextBtn;
 
     public SetGenderFragment() {
         // Required empty public constructor
@@ -60,10 +60,14 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
         });
         switchType();
 
-        phoneLoginBtn = rootView.findViewById(R.id.phoneLoginBtn);
-        phoneLoginBtn.setOnClickListener(this);
+        nextBtn = rootView.findViewById(R.id.nextBtn);
+        nextBtn.setOnClickListener(this);
 
-
+        if(!LoginActivity.user.isFacebookUser()) {
+            nextBtn.setText("Next");
+            nextBtn.setTextColor(Color.rgb(0, 0, 0));
+            nextBtn.setBackgroundColor(Color.rgb(255, 255, 255));
+        }
 
 
 

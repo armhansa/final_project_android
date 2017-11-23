@@ -116,10 +116,12 @@ public class SetProfileFragment extends Fragment
             ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
 
-                    LoginActivity.user.setProfile("gs://cutepid-7bc10.appspot.com/profileImages/"+LoginActivity.user.getId());
+//                    "gs://cutepid-7bc10.appspot.com/profileImages/"+LoginActivity.user.getId()
+                    LoginActivity.user.setProfile(taskSnapshot.getDownloadUrl().toString());
 
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.mainLoginFragment, new SetBirthDayFragment())

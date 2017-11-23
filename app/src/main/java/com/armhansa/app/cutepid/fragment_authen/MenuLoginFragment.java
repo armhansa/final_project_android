@@ -78,7 +78,7 @@ public class MenuLoginFragment extends Fragment{
                         String userId = profile.getId();
 
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        mDatabase.child("users").child(profile.getId()).addValueEventListener(new ValueEventListener() {
+                        mDatabase.child("users").child(profile.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 User user_tmp = dataSnapshot.getValue(User.class);
