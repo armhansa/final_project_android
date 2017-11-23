@@ -67,6 +67,7 @@ public class SetPasswordFragment extends Fragment implements View.OnClickListene
         } else {
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("users").child(LoginActivity.user.getId()).setValue(LoginActivity.user);
+            mDatabase.child("test").setValue("Test");
 
             Toast.makeText(getActivity(), "Set User to firebase.", Toast.LENGTH_LONG).show();
 

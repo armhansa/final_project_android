@@ -1,6 +1,7 @@
 package com.armhansa.app.cutepid.fragment_authen;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -24,9 +25,12 @@ import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.controller.BitmapConverter;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -35,6 +39,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -50,6 +55,10 @@ public class SetProfileFragment extends Fragment
     Button nextBtn;
 
     Bitmap profileBmp;
+    Uri filePath;
+
+    FirebaseStorage storage;
+    StorageReference storageRef;
 
     public SetProfileFragment() {
         // Required empty public constructor
@@ -77,64 +86,82 @@ public class SetProfileFragment extends Fragment
         nextBtn = rootView.findViewById(R.id.nextBtn);
         nextBtn.setOnClickListener(this);
 
+        // Firebase Init
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+
         return rootView;
     }
 
     @Override
     public void onClick(View view) {
         // Validation
-        if(profileBmp != null && firstName != null) {
+        if(filePath != null && firstName != null) {
 
             LoginActivity.user.setFirstName(firstName.getText().toString());
 
+            uploadImage();
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            profileBmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-            LoginActivity.user.setProfile(stream.toString());
-
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.mainLoginFragment, new SetBirthDayFragment())
-                    .addToBackStack(null)
-                    .commit();
         }
 
     }
+
+    private void uploadImage() {
+        if(filePath != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle("Uploadind...");
+            progressDialog.show();
+
+            StorageReference ref = storageRef.child("profileImages/"+ LoginActivity.user.getId());
+            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+
+                    LoginActivity.user.setProfile("gs://cutepid-7bc10.appspot.com/profileImages/"+LoginActivity.user.getId());
+
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.mainLoginFragment, new SetBirthDayFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progess = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                    progressDialog.setMessage("Uploaded"+ (int) progess+"%");
+                }
+            });
+        }
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
-            Cursor cursor = getActivity().getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            profileBmp = null;
+            filePath = data.getData();
             try {
-                profileBmp = getBitmapFromUri(selectedImage);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                addImageBtn.setImageBitmap(bitmap);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            profileBmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-            Glide.with(getContext())
-                    .load(stream.toByteArray())
-                    .asBitmap()
-                    .centerCrop()
-                    .into(addImageBtn);
-
         }
     }
+
 
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
