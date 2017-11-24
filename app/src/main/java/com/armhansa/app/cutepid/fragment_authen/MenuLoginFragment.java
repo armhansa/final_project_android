@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.HomeActivity;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.controller.CommonSharePreference;
+import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.armhansa.app.cutepid.model.User;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

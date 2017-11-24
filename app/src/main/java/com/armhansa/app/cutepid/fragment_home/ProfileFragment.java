@@ -11,13 +11,12 @@ import android.widget.Button;
 
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.controller.CommonSharePreference;
+import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.tool.CommonNotification;
+import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
 
 public class ProfileFragment extends Fragment {
 
@@ -38,6 +37,7 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        CommonSharePreference preference = new CommonSharePreference(getContext());
 
         callbackManager = CallbackManager.Factory.create();
         logoutBtn = rootView.findViewById(R.id.logoutBtn);

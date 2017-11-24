@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.armhansa.app.cutepid.controller.CommonSharePreference;
+import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.armhansa.app.cutepid.fragment_authen.MenuLoginFragment;
 import com.armhansa.app.cutepid.model.User;
 import com.facebook.FacebookSdk;

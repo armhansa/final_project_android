@@ -10,18 +10,25 @@ import java.util.concurrent.TimeUnit;
 
 public class User {
 
+    private static User ownAccount;
+
     private String id;
-    private String email;
     private String password;
     private String firstName;
     private Date birthDay;
     private String gender;
     private String status;
     private String profile;
-    private List<Byte> phoneProfile;
     private int age;
-
     private boolean facebookUser;
+
+    public static void setOwnAccount(User user) {
+        ownAccount = user;
+    }
+
+    public static User getOwnerAccount() {
+        return ownAccount;
+    }
 
     public String getId() {
         return id;
@@ -29,14 +36,6 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {
@@ -55,13 +54,13 @@ public class User {
         this.firstName = firstName;
     }
 
-    public Date getBirthDay() {
-        return birthDay;
-    }
-
     public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
         age = getDiffYears(birthDay, new Date());
+    }
+
+    public Date getBirthDay() {
+        return birthDay;
     }
 
     public int getAge() {
@@ -118,11 +117,4 @@ public class User {
         return cal;
     }
 
-    public List<Byte> getPhoneProfile() {
-        return phoneProfile;
-    }
-
-    public void setPhoneProfile(List<Byte> phoneProfile) {
-        this.phoneProfile = phoneProfile;
-    }
 }

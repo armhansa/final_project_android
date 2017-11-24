@@ -13,7 +13,7 @@ import android.widget.Button;
 import com.armhansa.app.cutepid.HomeActivity;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.controller.CommonSharePreference;
+import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -68,7 +68,6 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
             nextBtn.setTextColor(Color.rgb(0, 0, 0));
             nextBtn.setBackgroundColor(Color.rgb(255, 255, 255));
         }
-
 
 
         return rootView;

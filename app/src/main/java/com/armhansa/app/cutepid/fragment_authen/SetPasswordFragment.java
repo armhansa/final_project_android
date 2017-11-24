@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.HomeActivity;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.controller.CommonSharePreference;
+import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

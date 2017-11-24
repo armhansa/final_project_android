@@ -1,4 +1,4 @@
-package com.armhansa.app.cutepid.controller;
+package com.armhansa.app.cutepid.tool;
 
 import com.armhansa.app.cutepid.model.User;
 import com.google.firebase.database.DataSnapshot;

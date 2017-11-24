@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.controller.CommonFirebaseConnection;
+import com.armhansa.app.cutepid.tool.CommonFirebaseConnection;
 
 /**
  * A simple {@link Fragment} subclass.

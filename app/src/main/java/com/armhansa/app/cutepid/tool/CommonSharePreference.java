@@ -1,4 +1,4 @@
-package com.armhansa.app.cutepid.controller;
+package com.armhansa.app.cutepid.tool;
 
 import android.content.Context;
 import android.content.SharedPreferences;

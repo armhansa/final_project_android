@@ -1,7 +1,6 @@
 package com.armhansa.app.cutepid.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.controller.BitmapConverter;
 import com.armhansa.app.cutepid.model.User;
 import com.bumptech.glide.Glide;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<Holder> {
