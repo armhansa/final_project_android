@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.fragment_home.ChatFragment;
 import com.armhansa.app.cutepid.fragment_home.HomeFragment;
 import com.armhansa.app.cutepid.fragment_home.ProfileFragment;
-import com.armhansa.app.cutepid.model.Interest;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
@@ -25,12 +24,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ThrowOnExtraProperties;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements CommonFirebase.FirebaseGetSingleValueListener, CommonFirebase.FirebaseSetValueListener {
@@ -122,7 +115,7 @@ public class HomeActivity extends AppCompatActivity
         if(user_tmp != null) {
             User.setOwnAccount(user_tmp);
             progressDialog.dismiss();
-//            Interest myInterest = Interest.getInterest();
+//            UserFilter myInterest = UserFilter.getInterest();
 //            myInterest.setAttibute("Women", 18, 25);
 //
 //            Map<String, Object> update = new HashMap<>();

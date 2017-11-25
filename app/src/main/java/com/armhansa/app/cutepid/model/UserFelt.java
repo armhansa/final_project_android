@@ -3,33 +3,22 @@ package com.armhansa.app.cutepid.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Feeling {
-
-    // Singleton
-    private static Feeling myFeeling;
+public class UserFelt {
 
     // Put User Felt Another (0 = disLiked, 1 = liked)
     Map<String, Integer> felt;
 
-    private Feeling() {
+    public UserFelt() {
         felt = new HashMap<>();
     }
 
-    public static Feeling getMyFeeling() {
-        if(myFeeling == null) myFeeling = new Feeling();
-        return myFeeling;
-    }
 
-    public static void setMyFeeling(Feeling feeling) {
-        myFeeling = feeling;
+    public void addLiked(String userId) {
+        felt.put(userId, 1);
     }
 
     public void addDisLiked(String userId) {
         felt.put(userId, 0);
-    }
-
-    public void addLiked(String userId) {
-        felt.put(userId, 1);
     }
 
     public boolean hasFelt(String userId) {

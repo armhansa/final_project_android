@@ -14,18 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.armhansa.app.cutepid.HomeActivity;
-import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.model.Feeling;
-import com.armhansa.app.cutepid.model.Interest;
+import com.armhansa.app.cutepid.model.UserChatter;
+import com.armhansa.app.cutepid.model.UserFelt;
+import com.armhansa.app.cutepid.model.UserFilter;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Objects;
 
 public class SetPasswordFragment extends Fragment
         implements View.OnClickListener, CommonFirebase.FirebaseSetValueListener{
@@ -41,7 +37,6 @@ public class SetPasswordFragment extends Fragment
     boolean isLogin;
 
     ProgressDialog progressDialog;
-    private int count = 3;
 
     public SetPasswordFragment() {
         // Required empty public constructor
@@ -86,29 +81,24 @@ public class SetPasswordFragment extends Fragment
 //            Invalidation
 
             // Set Value
+
             User.getOwnerAccount().setPassword(password.getText().toString());
 
-            User user_tmp = User.getOwnerAccount();
+            UserFilter myUserFilter = new UserFilter(
+                    "Men".equals(User.getOwnerAccount().getGender()) ? "Women" : "Men"
+                    , 18, User.getOwnerAccount().getAge()+12);
+
+            UserFelt myFelt = new UserFelt();
+
+            UserChatter myUserChatter = new UserChatter();
+
+            User.getOwnerAccount().setMyUserFilter(myUserFilter);
+            User.getOwnerAccount().setMyUserFelt(myFelt);
+            User.getOwnerAccount().setMyUserChatter(myUserChatter);
 
             CommonFirebase firebase = new CommonFirebase("users");
             firebase.setFirebaseSetValueListener(this);
-            firebase.set(user_tmp.getId(), user_tmp);
-
-            Interest myInterest = Interest.getInterest(
-                    "Men".equals(user_tmp.getGender()) ? "Women" : "Men"
-                    , 18, user_tmp.getAge()+12);
-
-            CommonFirebase firebase1 = new CommonFirebase("interests");
-            firebase1.setFirebaseSetValueListener(this);
-            firebase1.set(user_tmp.getId(), myInterest);
-
-            Feeling felt = Feeling.getMyFeeling();
-
-            CommonFirebase firebase2 = new CommonFirebase("felt");
-            firebase2.setFirebaseSetValueListener(this);
-            firebase2.set(user_tmp.getId(), felt);
-
-
+            firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
 
         }
 
@@ -136,10 +126,8 @@ public class SetPasswordFragment extends Fragment
 
     @Override
     public void doOnComplete(Task<Void> task) {
-        if(--count <= 0) {
-            login();
-            progressDialog.dismiss();
+        login();
+        progressDialog.dismiss();
 
-        }
     }
 }

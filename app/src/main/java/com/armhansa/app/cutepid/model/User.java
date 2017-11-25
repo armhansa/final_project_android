@@ -1,20 +1,16 @@
 package com.armhansa.app.cutepid.model;
 
-import android.graphics.Bitmap;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class User {
 
     private static User ownAccount;
 
-//    private Interest myInterest;
-//    private Feeling myFeeling;
-//    private Chatter myChatter;
+    private UserFilter myUserFilter;
+    private UserFelt myUserFelt;
+    private UserChatter myUserChatter;
 
     private String id;
     private String password;
@@ -34,29 +30,31 @@ public class User {
         return ownAccount;
     }
 
-//    public void setMyInterest(Interest myInterest) {
-//        this.myInterest = myInterest;
-//    }
-//
-//    public Interest getMyInterest() {
-//        return myInterest;
-//    }
-//
-//    public Feeling getMyFeeling() {
-//        return myFeeling;
-//    }
-//
-//    public void setMyFeeling(Feeling myFeeling) {
-//        this.myFeeling = myFeeling;
-//    }
-//
-//    public Chatter getMyChatter() {
-//        return myChatter;
-//    }
-//
-//    public void setMyChatter(Chatter myChatter) {
-//        this.myChatter = myChatter;
-//    }
+    public void setMyUserFilter(UserFilter myUserFilter) {
+        this.myUserFilter = myUserFilter;
+    }
+
+    public UserFilter getMyUserFilter() {
+        if(myUserFilter == null) myUserFilter = new UserFilter();
+        return myUserFilter;
+    }
+
+    public UserFelt getMyUserFelt() {
+        if(myUserFelt == null) myUserFelt = new UserFelt();
+        return myUserFelt;
+    }
+
+    public void setMyUserFelt(UserFelt myUserFelt) {
+        this.myUserFelt = myUserFelt;
+    }
+
+    public UserChatter getMyUserChatter() {
+        return myUserChatter;
+    }
+
+    public void setMyUserChatter(UserChatter myUserChatter) {
+        this.myUserChatter = myUserChatter;
+    }
 
     public String getId() {
         return id;

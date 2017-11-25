@@ -4,11 +4,11 @@ package com.armhansa.app.cutepid.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Chatter {
+public class UserChatter {
 
     private Map<String, Chat> chatter;
 
-    public Chatter() {
+    public UserChatter() {
         chatter = new HashMap<>();
     }
 
@@ -24,4 +24,5 @@ public class Chatter {
     public void setChatter(Map<String, Chat> chatter) {
         this.chatter = chatter;
     }
+
 }

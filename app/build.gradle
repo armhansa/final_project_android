@@ -45,6 +45,9 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.6.0'
     compile 'com.google.firebase:firebase-auth:11.6.0'
 
+    // Add for use Firebase Could Message
+    compile 'com.google.firebase:firebase-messaging:11.6.0'
+
     // Add for Login via Facebook
     //noinspection GradleDependency
     compile 'com.facebook.android:facebook-login:[4,5)'

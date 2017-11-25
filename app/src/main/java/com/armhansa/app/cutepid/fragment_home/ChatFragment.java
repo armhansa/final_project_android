@@ -28,7 +28,6 @@ implements ChatAdapter.ChatListener{
 
     private View rootView;
 
-    private List<User> chatter;
 
     private TextView noChatter;
     private RecyclerView listChat;
@@ -66,7 +65,6 @@ implements ChatAdapter.ChatListener{
                 }
 
                 if(users.size() != 0) {
-                    chatter = users;
                     noChatter.setVisibility(View.GONE);
                     listChat.setVisibility(View.VISIBLE);
                     chatAdapter.setUsers(users);
@@ -81,7 +79,7 @@ implements ChatAdapter.ChatListener{
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Chatter is Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "UserChatter is Cancelled", Toast.LENGTH_SHORT).show();
             }
         });
 

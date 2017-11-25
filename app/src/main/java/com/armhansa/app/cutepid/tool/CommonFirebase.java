@@ -1,9 +1,11 @@
 package com.armhansa.app.cutepid.tool;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
-import com.armhansa.app.cutepid.model.Feeling;
-import com.armhansa.app.cutepid.model.Interest;
+import com.armhansa.app.cutepid.model.UserFelt;
+import com.armhansa.app.cutepid.model.UserFilter;
 import com.armhansa.app.cutepid.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,10 +18,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CommonFirebase {
 
     private DatabaseReference mDatabase;
+
+    Context context;
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public interface FirebaseSetValueListener {
         void doOnComplete(Task<Void> task);
@@ -83,26 +92,32 @@ public class CommonFirebase {
 
     public void getUsersPassFilter() {
 
-        Interest filter = Interest.getInterest();
+        final UserFilter filter = User.getOwnerAccount().getMyUserFilter();
 
-        Query filtered = mDatabase.orderByChild("Gender").equalTo(filter.getGender());
-        filtered.orderByChild("Age").startAt(filter.getMin_age()).endAt(filter.getMax_age());
+        Query filtered = mDatabase.orderByChild("age")
+                .startAt(filter.getMin_age())
+                .endAt(filter.getMax_age());
         filtered.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> list = dataSnapshot.getChildren();
 
-                Feeling myFeeling = Feeling.getMyFeeling();
+                UserFelt myUserFelt = User.getOwnerAccount().getMyUserFelt();
 
                 // Filter User
                 List<User> userList = new ArrayList<>();
-
-                for (DataSnapshot dataSnapshot1 : list) {
-                    if (myFeeling.hasFelt(dataSnapshot.getValue(User.class).getId())) {
-                        userList.add(dataSnapshot1.getValue(User.class));
+                int count = 0;
+                int total = 0;
+                for (DataSnapshot i : list) {
+                    User myUser = i.getValue(User.class);
+                    total++;
+                    if (!myUserFelt.hasFelt(myUser.getId())
+                            && myUser.getGender().equals(filter.getGender())) {
+                        count++;
+                        userList.add(myUser);
                     }
                 }
-
+                Toast.makeText(context, count+"/"+total, Toast.LENGTH_LONG).show();
                 // Setting data
                 firebaseGetMultiValueListener.doOnMultiDataChange(userList);
             }

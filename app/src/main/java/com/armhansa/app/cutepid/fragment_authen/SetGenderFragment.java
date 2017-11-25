@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +12,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.armhansa.app.cutepid.HomeActivity;
-import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.model.Chatter;
-import com.armhansa.app.cutepid.model.Feeling;
-import com.armhansa.app.cutepid.model.Interest;
+import com.armhansa.app.cutepid.model.UserChatter;
+import com.armhansa.app.cutepid.model.UserFilter;
 import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.model.UserFelt;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +39,6 @@ public class SetGenderFragment extends Fragment
     Button nextBtn;
 
     ProgressDialog progressDialog;
-    private int count = 2;
 
     public SetGenderFragment() {
         // Required empty public constructor
@@ -112,17 +106,21 @@ public class SetGenderFragment extends Fragment
             CommonSharePreference preference = new CommonSharePreference(getActivity());
             preference.save("UserID", User.getOwnerAccount().getId());
 
-            CommonFirebase firebase = new CommonFirebase("users");
-            firebase.setFirebaseSetValueListener(this);
-            firebase.set(userId, User.getOwnerAccount());
-
-            Interest myInterest = Interest.getInterest(
+            UserFilter myUserFilter = new UserFilter(
                     isMen ? "Women" : "Men", 18
                     , User.getOwnerAccount().getAge()+12);
 
-            CommonFirebase firebase1 = new CommonFirebase("interests");
-            firebase1.setFirebaseSetValueListener(this);
-            firebase1.set(userId, myInterest);
+            UserFelt myFelt = new UserFelt();
+
+            UserChatter myUserChatter = new UserChatter();
+
+            User.getOwnerAccount().setMyUserFilter(myUserFilter);
+            User.getOwnerAccount().setMyUserFelt(myFelt);
+            User.getOwnerAccount().setMyUserChatter(myUserChatter);
+
+            CommonFirebase firebase = new CommonFirebase("users");
+            firebase.setFirebaseSetValueListener(this);
+            firebase.set(userId, User.getOwnerAccount());
 
         } else {
 
@@ -139,14 +137,12 @@ public class SetGenderFragment extends Fragment
 
     @Override
     public void doOnComplete(Task<Void> task) {
-        if(--count <= 0) {
-            Intent goToHome = new Intent(getActivity(), HomeActivity.class);
-            startActivity(goToHome);
-            getActivity().finish();
+        Intent goToHome = new Intent(getActivity(), HomeActivity.class);
+        startActivity(goToHome);
+        getActivity().finish();
 
-            progressDialog.dismiss();
+        progressDialog.dismiss();
 
-        }
 
     }
 }
