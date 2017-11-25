@@ -11,6 +11,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +22,12 @@ import com.armhansa.app.cutepid.adapter.ChatAdapter;
 import com.armhansa.app.cutepid.firebase_cloud_message.MyFirebaseInstanceIDService;
 import com.armhansa.app.cutepid.firebase_cloud_message.SharedPrefManager;
 import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.model.UserList;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.List;
@@ -33,8 +41,16 @@ public class HomeFragment extends Fragment
 
     View rootView;
 
-    TextView firstName;
-    private BroadcastReceiver broadcastReceiver;
+    public UserList randomUserFiltered;
+    public User randomUser;
+
+    TextView noUser;
+    LinearLayout allContent;
+
+    private ImageView profile;
+    private TextView firstName, status;
+    private Button likeBtn, disLikeBtn;
+//    private BroadcastReceiver broadcastReceiver;
 
     private ProgressDialog progressDialog;
 
@@ -42,7 +58,7 @@ public class HomeFragment extends Fragment
 //    private ChatAdapter chatAdapter;
 //    public RecyclerView listChat;
 //
-    public List<User> randomUserFiltered;
+
 
 
     public HomeFragment() {
@@ -55,21 +71,49 @@ public class HomeFragment extends Fragment
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        firstName = rootView.findViewById(R.id.firstName);
+        randomUserFiltered = new UserList();
 
-        broadcastReceiver = new BroadcastReceiver() {
+        noUser = rootView.findViewById(R.id.noUser);
+        noUser.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                firstName.setText(SharedPrefManager.getInstance(getContext()).getToken());
+            public void onClick(View view) {
+                refresh();
             }
-        };
+        });
+        allContent = rootView.findViewById(R.id.allContent);
 
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
+        profile = rootView.findViewById(R.id.profile);
+        firstName = rootView.findViewById(R.id.firstName);
+        status = rootView.findViewById(R.id.status);
+        likeBtn = rootView.findViewById(R.id.like);
+        likeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                like();
+            }
+        });
+        disLikeBtn = rootView.findViewById(R.id.dislike);
+        disLikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                disLike();
+            }
+        });
 
 
-        if(SharedPrefManager.getInstance(getContext()).getToken() == null) {
-            Toast.makeText(getContext(), "Token is Null", Toast.LENGTH_LONG).show();
-        }
+//        broadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                firstName.setText(SharedPrefManager.getInstance(getContext()).getToken());
+//            }
+//        };
+//
+//        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
+
+
+//        if(SharedPrefManager.getInstance(getContext()).getToken() == null) {
+//            Toast.makeText(getContext(), "Token is Null", Toast.LENGTH_LONG).show();
+//        }
 //        Test
 //        listChat = rootView.findViewById(R.id.listChat);
 //        listChat.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -91,12 +135,26 @@ public class HomeFragment extends Fragment
         return rootView;
     }
 
+    private void refresh() {
+        progressDialog.setMessage("Loading...");
+
+        progressDialog.show();
+
+        CommonFirebase firebase = new CommonFirebase("users");
+        firebase.setFirebaseGetMultiValueListener(this);
+        firebase.setContext(getContext());
+        firebase.getUsersPassFilter();
+    }
 
 
     @Override
     public void doOnMultiDataChange(List<User> dataUser) {
         if(dataUser != null && dataUser.size() > 0) {
-            randomUserFiltered = dataUser;
+            randomUserFiltered.setUsers(dataUser);
+
+            allContent.setVisibility(View.VISIBLE);
+            noUser.setVisibility(View.GONE);
+            switchRandom();
 
 //            chatAdapter.setUsers(dataUser);
 //            listChat.setAdapter(chatAdapter);
@@ -116,14 +174,33 @@ public class HomeFragment extends Fragment
     }
 
     private void switchRandom() {
+        if(randomUserFiltered.getUsers().size() > 0) {
+            randomUser = randomUserFiltered.getRandomUser();
+
+            Glide.with(getContext())
+                    .load(randomUser.getProfile())
+//                .apply(myOption)
+                    .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(150)))
+                    .into(profile);
+            firstName.setText(randomUser.getFirstName());
+            status.setText(randomUser.getStatus());
+        } else {
+            // Show text Not Have Someone
+            allContent.setVisibility(View.GONE);
+            noUser.setVisibility(View.VISIBLE);
+        }
 
     }
 
     private void like() {
 
+        switchRandom();
+
     }
 
     private void disLike() {
+
+        switchRandom();
 
     }
 
