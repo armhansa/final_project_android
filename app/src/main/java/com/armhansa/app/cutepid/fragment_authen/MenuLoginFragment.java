@@ -1,6 +1,7 @@
 package com.armhansa.app.cutepid.fragment_authen;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,38 +9,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.armhansa.app.cutepid.HomeActivity;
-import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
+import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.armhansa.app.cutepid.model.User;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
-public class MenuLoginFragment extends Fragment{
+public class MenuLoginFragment extends Fragment
+        implements CommonFirebase.FirebaseGetSingleValueListener {
 
-    View rootView;
+    private View rootView;
 
-    ImageView profileImage;
+    private CallbackManager callbackManager;
+    private Profile profile;
 
-    CallbackManager callbackManager;
+    private ProgressDialog progressDialog;
+    private int count = 2;
 
-    Profile profile;
-    User user;
+    private final String ERROR_MESSAGE = "Something wrong. Please try again.";
 
     public MenuLoginFragment() {
         // Required empty public constructor
@@ -52,11 +52,11 @@ public class MenuLoginFragment extends Fragment{
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_menu_login, container, false);
 
-        LoginActivity.user = new User();
-        profileImage = rootView.findViewById(R.id.imageProfile);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Login...");
 
-        final Button loginBtn = rootView.findViewById(R.id.loginBtn);
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        Button phoneLoginBtn = rootView.findViewById(R.id.loginBtn);
+        phoneLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 nextPageLogin();
@@ -64,89 +64,108 @@ public class MenuLoginFragment extends Fragment{
         });
 
         callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = rootView.findViewById(R.id.facebookBtn);
-        loginButton.setFragment(this);
-        loginButton.setReadPermissions(Arrays.asList(
+        LoginButton facebookLoginBtn = rootView.findViewById(R.id.facebookBtn);
+        facebookLoginBtn.setFragment(this);
+        facebookLoginBtn.setReadPermissions(Arrays.asList(
                 "public_profile", "email", "user_friends"));
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        facebookLoginBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
                 if(loginResult != null) {
                     try {
                         profile = Profile.getCurrentProfile();
-                        String userId = profile.getId();
 
-                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        mDatabase.child("users").child(profile.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                User user_tmp = dataSnapshot.getValue(User.class);
-                                LoginActivity.user.setFacebookUser(true);
-                                if(user_tmp != null) {
-                                    user = user_tmp;
-                                    CommonSharePreference preference = new CommonSharePreference(getActivity());
-                                    preference.save("User", LoginActivity.user);
+                        progressDialog.show();
 
-                                    Intent goToHome = new Intent(getActivity(), HomeActivity.class);
-                                    startActivity(goToHome);
-                                    getActivity().finish();
-
-                                } else {
-                                    LoginActivity.user.setId(profile.getId());
-                                    String photoUri = profile.getProfilePictureUri(720, 720).toString();
-                                    LoginActivity.user.setFirstName(profile.getFirstName());
-                                    LoginActivity.user.setProfile(photoUri);
-
-                                    getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.mainLoginFragment, new SetBirthDayFragment())
-                                            .addToBackStack(null)
-                                            .commit();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
+                        CommonFirebase firebase = new CommonFirebase("users");
+                        firebase.setFirebaseGetSingleValueListener(MenuLoginFragment.this);
+                        firebase.getAccount(profile.getId());
 
 
                     } catch (Exception ex) {
-                        Toast.makeText(getActivity(), "Please Login with facebook", Toast.LENGTH_SHORT).show();
+                        LoginManager.getInstance().logOut();
+                        Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+
+                        progressDialog.dismiss();
                     }
 
                 } else {
-                    Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+
                 }
             }
 
             @Override
             public void onCancel() {
-
+                Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getActivity(), "Facebook Login Error, please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
 
         return rootView;
     }
 
-    private void nextPageLogin() {
-        LoginActivity.user.setFacebookUser(false);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLoginFragment, new PhoneNumberLoginFragment())
-                .addToBackStack(null)
-                .commit();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void doOnSingleDataChange(DataSnapshot dataSnapshot) {
+        User user_tmp = dataSnapshot.getValue(User.class);
+
+        if(user_tmp != null) {
+            User.setOwnAccount(user_tmp);
+
+            CommonSharePreference preference = new CommonSharePreference(getActivity());
+            preference.save("UserID", user_tmp.getId());
+
+            Intent goToHome = new Intent(getActivity(), HomeActivity.class);
+            startActivity(goToHome);
+            getActivity().finish();
+
+            progressDialog.dismiss();
+
+        } else {
+            user_tmp = new User();
+            user_tmp.setFacebookUser(true);
+            user_tmp.setId(profile.getId());
+            user_tmp.setFirstName(profile.getFirstName());
+            String photoUri = profile.getProfilePictureUri(720, 720).toString();
+            user_tmp.setProfile(photoUri);
+
+            User.setOwnAccount(user_tmp);
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    .replace(R.id.mainLoginFragment, new SetBirthDayFragment())
+                    .addToBackStack(null)
+                    .commit();
+
+            progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void doOnSingleCancelled(DatabaseError databaseError) {
+        Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+    }
+
+    private void nextPageLogin() {
+        User user_tmp = new User();
+        user_tmp.setFacebookUser(false);
+        User.setOwnAccount(user_tmp);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .replace(R.id.mainLoginFragment, new PhoneNumberLoginFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="7"
+    android:weightSum="4"
+    android:padding="5dp"
     android:orientation="vertical"
     tools:context="com.armhansa.app.cutepid.fragment_home.ProfileFragment">
 
@@ -14,31 +15,71 @@
     <ImageView
         android:id="@+id/profileImage"
         android:layout_gravity="center"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="0dp"
         android:layout_weight="3"/>
 
+
+    <TextView
+        android:id="@+id/firstName"
+        android:text="FirstName, Age"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:orientation="vertical">
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/settingBtn"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
 
         <TextView
-            android:id="@+id/firstName"
-            android:text="FirstName"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="80dp"
+            android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/status"
-            android:text="Status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/editInfoBtn"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:text="Setting"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="80dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:text="Edit Info"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="80dp"
+            android:layout_height="30dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
     <Button
         android:id="@+id/logoutBtn"

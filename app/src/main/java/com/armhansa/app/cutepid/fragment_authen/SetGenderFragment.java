@@ -1,9 +1,11 @@
 package com.armhansa.app.cutepid.fragment_authen;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +15,20 @@ import android.widget.Button;
 import com.armhansa.app.cutepid.HomeActivity;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
+import com.armhansa.app.cutepid.model.Interest;
+import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SetGenderFragment extends Fragment implements View.OnClickListener {
+public class SetGenderFragment extends Fragment
+        implements View.OnClickListener, CommonFirebase.FirebaseSetValueListener {
 
     View rootView;
 
@@ -33,6 +41,8 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
 
     Button nextBtn;
 
+    ProgressDialog progressDialog;
+
     public SetGenderFragment() {
         // Required empty public constructor
     }
@@ -43,6 +53,8 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_set_gender, container, false);
+
+        progressDialog = new ProgressDialog(getContext());
 
         menBtn = rootView.findViewById(R.id.men);
         menBtn.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +75,7 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
         nextBtn = rootView.findViewById(R.id.nextBtn);
         nextBtn.setOnClickListener(this);
 
-        if(!LoginActivity.user.isFacebookUser()) {
+        if(!User.getOwnerAccount().isFacebookUser()) {
             nextBtn.setText("Next");
             nextBtn.setTextColor(Color.rgb(0, 0, 0));
             nextBtn.setBackgroundColor(Color.rgb(255, 255, 255));
@@ -86,22 +98,29 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
 
-        LoginActivity.user.setGender(isMen ? "Men" : "Women");
+        User.getOwnerAccount().setGender(isMen ? "Men" : "Women");
 
-        CommonSharePreference preference = new CommonSharePreference(getActivity());
-        preference.save("User", LoginActivity.user);
+        if(User.getOwnerAccount().isFacebookUser()) {
+            progressDialog.setMessage("Login...");
+            progressDialog.show();
 
-        if(LoginActivity.user.isFacebookUser()) {
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("users").child(LoginActivity.user.getId()).setValue(LoginActivity.user);
+            CommonSharePreference preference = new CommonSharePreference(getActivity());
+            preference.save("UserID", User.getOwnerAccount().getId());
 
-            Intent goToHome = new Intent(getActivity(), HomeActivity.class);
-            startActivity(goToHome);
-            getActivity().finish();
+            Interest myInterest = Interest.getInterest();
+            myInterest.setAttibute(isMen ? "Women" : "Men", 18, User.getOwnerAccount().getAge()+12);
+
+            User.getOwnerAccount().setMyInterest(myInterest);
+
+            CommonFirebase firebase = new CommonFirebase("users");
+            firebase.setFirebaseSetValueListener(this);
+            firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
+
 
         } else {
 
             getActivity().getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .replace(R.id.mainLoginFragment, SetPasswordFragment.newInstance(false))
                     .addToBackStack(null)
                     .commit();
@@ -109,5 +128,14 @@ public class SetGenderFragment extends Fragment implements View.OnClickListener 
 
 
 
+    }
+
+    @Override
+    public void doOnComplete(Task<Void> task) {
+        Intent goToHome = new Intent(getActivity(), HomeActivity.class);
+        startActivity(goToHome);
+        getActivity().finish();
+
+        progressDialog.dismiss();
     }
 }

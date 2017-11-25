@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.tool.CommonFirebaseConnection;
+import com.armhansa.app.cutepid.tool.CommonFirebase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +27,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        CommonFirebaseConnection firebase = new CommonFirebaseConnection("/users");
+        CommonFirebase firebase = new CommonFirebase("/users");
 
         return rootView;
     }

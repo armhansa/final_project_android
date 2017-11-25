@@ -1,10 +1,8 @@
 package com.armhansa.app.cutepid;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,18 +11,33 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
 import com.armhansa.app.cutepid.fragment_home.ChatFragment;
 import com.armhansa.app.cutepid.fragment_home.HomeFragment;
 import com.armhansa.app.cutepid.fragment_home.ProfileFragment;
+import com.armhansa.app.cutepid.model.Interest;
 import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class HomeActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
+
+public class HomeActivity extends AppCompatActivity
+        implements CommonFirebase.FirebaseGetSingleValueListener, CommonFirebase.FirebaseSetValueListener {
 
     private CommonSharePreference preference;
-    public static User myAccount;
+    private ProgressDialog progressDialog;
+
+    private String id_test[] = {"10210757356870183", "1549554765131256", "1609312035758079"
+            , "1620676541322575", "1677606392278937", "1714682678544039", "1819681874730726"
+            , "2031094127128098", "2173016396057118", "0909828682", "0914939888"};
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -46,32 +59,33 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        preference = new CommonSharePreference(this);
-        myAccount = (User) preference.read("User", User.class);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        preference = new CommonSharePreference(this);
+        String userId = (String) preference.read("UserID", String.class);
+
+        if(userId != null) {
+            CommonFirebase firebase = new CommonFirebase("users");
+            firebase.setFirebaseGetSingleValueListener(this);
+            firebase.getAccount(userId);
+
+        }
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(1);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
     }
 
@@ -80,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -98,6 +113,45 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void doOnSingleDataChange(DataSnapshot dataSnapshot) {
+        User user_tmp = dataSnapshot.getValue(User.class);
+        if(user_tmp != null) {
+            User.setOwnAccount(user_tmp);
+
+            Interest myInterest = Interest.getInterest();
+            myInterest.setAttibute("Women", 18, 25);
+
+            Map<String, Object> update = new HashMap<>();
+
+            for(String id: id_test) {
+                update.put(id+"/myInterest", myInterest);
+            }
+
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            ref.child("users").updateChildren(update);
+
+            progressDialog.dismiss();
+
+        } else {
+            Toast.makeText(this, "Error null", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+        }
+
+    }
+
+    @Override
+    public void doOnSingleCancelled(DatabaseError databaseError) {
+        Toast.makeText(this, "Error : "+databaseError.getMessage()
+                , Toast.LENGTH_LONG).show();
+
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void doOnComplete(Task<Void> task) {
+        progressDialog.dismiss();
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -130,16 +184,5 @@ public class HomeActivity extends AppCompatActivity {
             return 3;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Profile";
-                case 1:
-                    return "Home";
-                default:
-                    return "Chat";
-            }
-        }
     }
 }

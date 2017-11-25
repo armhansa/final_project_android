@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
+import com.armhansa.app.cutepid.model.User;
 
 import java.util.Calendar;
 
@@ -54,12 +56,18 @@ public class SetBirthDayFragment extends Fragment
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
 
-        LoginActivity.user.setBirthDay(calendar.getTime());
+        User.getOwnerAccount().setBirthDay(calendar.getTime());
+        if(User.getOwnerAccount().getAge() >= 18) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    .replace(R.id.mainLoginFragment, new SetGenderFragment())
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            Toast.makeText(getContext(), "Min age is 18 years", Toast.LENGTH_LONG).show();
 
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLoginFragment, new SetGenderFragment())
-                .addToBackStack(null)
-                .commit();
+        }
+
 
     }
 }

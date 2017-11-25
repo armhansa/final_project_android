@@ -1,6 +1,7 @@
 package com.armhansa.app.cutepid.fragment_authen;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,11 +16,18 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.HomeActivity;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
+import com.armhansa.app.cutepid.model.Interest;
+import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class SetPasswordFragment extends Fragment implements View.OnClickListener{
+import java.util.Objects;
+
+public class SetPasswordFragment extends Fragment
+        implements View.OnClickListener, CommonFirebase.FirebaseSetValueListener{
 
     View rootView;
 
@@ -31,6 +39,8 @@ public class SetPasswordFragment extends Fragment implements View.OnClickListene
 
     boolean isLogin;
 
+    ProgressDialog progressDialog;
+
     public SetPasswordFragment() {
         // Required empty public constructor
     }
@@ -40,6 +50,8 @@ public class SetPasswordFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_set_password, container, false);
+
+        progressDialog = new ProgressDialog(getContext());
 
         passwordTxt = rootView.findViewById(R.id.passwordTxt);
 // Set Password Text Must Have New Argument
@@ -56,24 +68,34 @@ public class SetPasswordFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
+        progressDialog.setMessage("Login...");
+        progressDialog.show();
 
         if(isLogin) {
-            if (LoginActivity.user.getPassword().equals(password.getText().toString())) {
+            if (User.getOwnerAccount().getPassword().equals(password.getText().toString())) {
                 login();
+                progressDialog.dismiss();
 
             } else {
                 Toast.makeText(getActivity(), "Invalid Password, please try again.", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
         } else {
 //            Invalidation
 
             // Set Value
-            LoginActivity.user.setPassword(password.getText().toString());
+            User.getOwnerAccount().setPassword(password.getText().toString());
 
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("users").child(LoginActivity.user.getId()).setValue(LoginActivity.user);
+            Interest myInterest = Interest.getInterest();
+            myInterest.setAttibute(
+                    "Men".equals(User.getOwnerAccount().getGender()) ? "Women" : "Men"
+                    , 18, User.getOwnerAccount().getAge()+12);
 
-            login();
+            User.getOwnerAccount().setMyInterest(myInterest);
+
+            CommonFirebase firebase = new CommonFirebase("users");
+            firebase.setFirebaseSetValueListener(this);
+            firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
 
         }
 
@@ -81,11 +103,12 @@ public class SetPasswordFragment extends Fragment implements View.OnClickListene
 
     public void login() {
         CommonSharePreference preference = new CommonSharePreference(getActivity());
-        preference.save("User", LoginActivity.user);
+        preference.save("UserID", User.getOwnerAccount().getId());
 
         Intent menuActivity = new Intent(getActivity(), HomeActivity.class);
         startActivity(menuActivity);
         getActivity().finish();
+
     }
 
     public static SetPasswordFragment newInstance(boolean isLogin) {
@@ -96,5 +119,12 @@ public class SetPasswordFragment extends Fragment implements View.OnClickListene
         args.putBoolean("IsLogin", isLogin);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void doOnComplete(Task<Void> task) {
+        login();
+        progressDialog.dismiss();
+
     }
 }

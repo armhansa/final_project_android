@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.User;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -23,12 +26,18 @@ public class ChatAdapter extends RecyclerView.Adapter<Holder> {
 
     private Context context;
 
+    RequestOptions myOption;
+
     public ChatAdapter() {
 
     }
 
     public ChatAdapter(Context context) {
         this.context = context;
+        myOption = new RequestOptions()
+                .centerCrop()
+                .fitCenter()
+                .circleCrop();
     }
 
     public interface ChatListener {
@@ -48,8 +57,6 @@ public class ChatAdapter extends RecyclerView.Adapter<Holder> {
     public void setContext(Context context) {
         this.context = context;
     }
-
-
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -74,13 +81,13 @@ public class ChatAdapter extends RecyclerView.Adapter<Holder> {
             }
         });
 
-
         Glide.with(context)
                 .load(users.get(position).getProfile())
-                .centerCrop()
+//                .apply(myOption)
+                .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(150)))
                 .into(profileImage);
-        firstName.setText(String.format("%s, %d", users.get(position).getFirstName(), users.get(position).getAge()));
-        status.setText(users.get(position).getStatus());
+        firstName.setText(String.format("   %s, %d", users.get(position).getFirstName(), users.get(position).getAge()));
+        status.setText("     "+users.get(position).getStatus());
 
     }
 

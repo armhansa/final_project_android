@@ -12,6 +12,9 @@ public class User {
 
     private static User ownAccount;
 
+    private Interest myInterest;
+    private Feeling feeling;
+
     private String id;
     private String password;
     private String firstName;
@@ -28,6 +31,14 @@ public class User {
 
     public static User getOwnerAccount() {
         return ownAccount;
+    }
+
+    public void setMyInterest(Interest myInterest) {
+        this.myInterest = myInterest;
+    }
+
+    public Interest getMyInterest() {
+        return myInterest;
     }
 
     public String getId() {
@@ -76,6 +87,7 @@ public class User {
     }
 
     public String getStatus() {
+        if(status == null) return "ยังโสดโสดอยู่ตรงนี้";
         return status;
     }
 
@@ -111,7 +123,7 @@ public class User {
         this.facebookUser = facebookUser;
     }
 
-    public static Calendar getCalendar(Date date) {
+    private static Calendar getCalendar(Date date) {
         Calendar cal = Calendar.getInstance(Locale.US);
         cal.setTime(date);
         return cal;

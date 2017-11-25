@@ -81,7 +81,7 @@ implements ChatAdapter.ChatListener{
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Chater is Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Chatter is Cancelled", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
+import com.armhansa.app.cutepid.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -39,12 +40,13 @@ public class SetProfileFragment extends Fragment
     View rootView;
     private static int RESULT_LOAD_IMAGE = 1;
 
+    ProgressDialog progressDialog;
+
     ImageView addImageBtn;
     EditText firstName;
 
     Button nextBtn;
 
-    Bitmap profileBmp;
     Uri filePath;
 
     FirebaseStorage storage;
@@ -60,6 +62,9 @@ public class SetProfileFragment extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_set_profile, container, false);
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Uploading...");
 
         addImageBtn = rootView.findViewById(R.id.addImageBtn);
         addImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -85,10 +90,9 @@ public class SetProfileFragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        // Validation
+        // Easy Validation
         if(filePath != null && firstName != null) {
-
-            LoginActivity.user.setFirstName(firstName.getText().toString());
+            User.getOwnerAccount().setFirstName(firstName.getText().toString());
 
             uploadImage();
 
@@ -98,11 +102,11 @@ public class SetProfileFragment extends Fragment
 
     private void uploadImage() {
         if(filePath != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(getContext());
-            progressDialog.setTitle("Uploadind...");
+
             progressDialog.show();
 
-            StorageReference ref = storageRef.child("profileImages/"+ LoginActivity.user.getId());
+            StorageReference ref = storageRef.child("profileImages/"
+                    + User.getOwnerAccount().getId());
             ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -110,8 +114,7 @@ public class SetProfileFragment extends Fragment
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
 
-//                    "gs://cutepid-7bc10.appspot.com/profileImages/"+LoginActivity.user.getId()
-                    LoginActivity.user.setProfile(taskSnapshot.getDownloadUrl().toString());
+                    User.getOwnerAccount().setProfile(taskSnapshot.getDownloadUrl().toString());
 
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.mainLoginFragment, new SetBirthDayFragment())
@@ -123,14 +126,16 @@ public class SetProfileFragment extends Fragment
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Failed "+e.getMessage()
+                            , Toast.LENGTH_SHORT).show();
                 }
             })
             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    double progess = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                    progressDialog.setMessage("Uploaded"+ (int) progess+"%");
+                    double process = (100.0 * taskSnapshot.getBytesTransferred()
+                            /taskSnapshot.getTotalByteCount());
+                    progressDialog.setMessage("Uploaded"+ (int) process+"%");
                 }
             });
         }
@@ -145,23 +150,14 @@ public class SetProfileFragment extends Fragment
 
             filePath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                Bitmap bitmap = MediaStore.Images.Media
+                        .getBitmap(getActivity().getContentResolver(), filePath);
                 addImageBtn.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
-    }
-
-
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                getActivity().getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
     }
 
 }
