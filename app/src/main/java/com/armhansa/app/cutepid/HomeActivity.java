@@ -1,6 +1,7 @@
 package com.armhansa.app.cutepid;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
@@ -20,11 +21,13 @@ import com.armhansa.app.cutepid.model.Interest;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ThrowOnExtraProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,21 +74,21 @@ public class HomeActivity extends AppCompatActivity
             firebase.setFirebaseGetSingleValueListener(this);
             firebase.getAccount(userId);
 
+        } else {
+            LoginManager.getInstance().logOut();
+//
+            CommonSharePreference preference = new CommonSharePreference(this);
+            preference.clear();
+
+            Intent logout = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(logout);
+            finish();
+
+            Toast.makeText(this, "Error userId is Null", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
         }
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setCurrentItem(1);
-
-        TabLayout tabLayout = findViewById(R.id.tabs);
-
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
     }
 
@@ -118,20 +121,36 @@ public class HomeActivity extends AppCompatActivity
         User user_tmp = dataSnapshot.getValue(User.class);
         if(user_tmp != null) {
             User.setOwnAccount(user_tmp);
-
-            Interest myInterest = Interest.getInterest();
-            myInterest.setAttibute("Women", 18, 25);
-
-            Map<String, Object> update = new HashMap<>();
-
-            for(String id: id_test) {
-                update.put(id+"/myInterest", myInterest);
-            }
-
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            ref.child("users").updateChildren(update);
-
             progressDialog.dismiss();
+//            Interest myInterest = Interest.getInterest();
+//            myInterest.setAttibute("Women", 18, 25);
+//
+//            Map<String, Object> update = new HashMap<>();
+//
+//            for(String id: id_test) {
+//                update.put(id+"/myInterest", myInterest);
+//            }
+//
+//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+//            ref.child("users").updateChildren(update);
+
+
+
+            // Create the adapter that will return a fragment for each of the three
+            // primary sections of the activity.
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = findViewById(R.id.container);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+            mViewPager.setCurrentItem(1);
+
+            TabLayout tabLayout = findViewById(R.id.tabs);
+
+            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+
 
         } else {
             Toast.makeText(this, "Error null", Toast.LENGTH_LONG).show();

@@ -15,6 +15,8 @@ import android.widget.Button;
 import com.armhansa.app.cutepid.HomeActivity;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
+import com.armhansa.app.cutepid.model.Chatter;
+import com.armhansa.app.cutepid.model.Feeling;
 import com.armhansa.app.cutepid.model.Interest;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
@@ -42,6 +44,7 @@ public class SetGenderFragment extends Fragment
     Button nextBtn;
 
     ProgressDialog progressDialog;
+    private int count = 2;
 
     public SetGenderFragment() {
         // Required empty public constructor
@@ -104,18 +107,22 @@ public class SetGenderFragment extends Fragment
             progressDialog.setMessage("Login...");
             progressDialog.show();
 
+            String userId = User.getOwnerAccount().getId();
+
             CommonSharePreference preference = new CommonSharePreference(getActivity());
             preference.save("UserID", User.getOwnerAccount().getId());
 
-            Interest myInterest = Interest.getInterest();
-            myInterest.setAttibute(isMen ? "Women" : "Men", 18, User.getOwnerAccount().getAge()+12);
-
-            User.getOwnerAccount().setMyInterest(myInterest);
-
             CommonFirebase firebase = new CommonFirebase("users");
             firebase.setFirebaseSetValueListener(this);
-            firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
+            firebase.set(userId, User.getOwnerAccount());
 
+            Interest myInterest = Interest.getInterest(
+                    isMen ? "Women" : "Men", 18
+                    , User.getOwnerAccount().getAge()+12);
+
+            CommonFirebase firebase1 = new CommonFirebase("interests");
+            firebase1.setFirebaseSetValueListener(this);
+            firebase1.set(userId, myInterest);
 
         } else {
 
@@ -132,10 +139,14 @@ public class SetGenderFragment extends Fragment
 
     @Override
     public void doOnComplete(Task<Void> task) {
-        Intent goToHome = new Intent(getActivity(), HomeActivity.class);
-        startActivity(goToHome);
-        getActivity().finish();
+        if(--count <= 0) {
+            Intent goToHome = new Intent(getActivity(), HomeActivity.class);
+            startActivity(goToHome);
+            getActivity().finish();
 
-        progressDialog.dismiss();
+            progressDialog.dismiss();
+
+        }
+
     }
 }

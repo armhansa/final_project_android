@@ -5,11 +5,23 @@ import java.util.Map;
 
 public class Feeling {
 
+    // Singleton
+    private static Feeling myFeeling;
+
     // Put User Felt Another (0 = disLiked, 1 = liked)
     Map<String, Integer> felt;
 
-    public Feeling() {
+    private Feeling() {
         felt = new HashMap<>();
+    }
+
+    public static Feeling getMyFeeling() {
+        if(myFeeling == null) myFeeling = new Feeling();
+        return myFeeling;
+    }
+
+    public static void setMyFeeling(Feeling feeling) {
+        myFeeling = feeling;
     }
 
     public void addDisLiked(String userId) {

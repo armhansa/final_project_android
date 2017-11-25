@@ -12,8 +12,9 @@ public class User {
 
     private static User ownAccount;
 
-    private Interest myInterest;
-    private Feeling feeling;
+//    private Interest myInterest;
+//    private Feeling myFeeling;
+//    private Chatter myChatter;
 
     private String id;
     private String password;
@@ -33,13 +34,29 @@ public class User {
         return ownAccount;
     }
 
-    public void setMyInterest(Interest myInterest) {
-        this.myInterest = myInterest;
-    }
-
-    public Interest getMyInterest() {
-        return myInterest;
-    }
+//    public void setMyInterest(Interest myInterest) {
+//        this.myInterest = myInterest;
+//    }
+//
+//    public Interest getMyInterest() {
+//        return myInterest;
+//    }
+//
+//    public Feeling getMyFeeling() {
+//        return myFeeling;
+//    }
+//
+//    public void setMyFeeling(Feeling myFeeling) {
+//        this.myFeeling = myFeeling;
+//    }
+//
+//    public Chatter getMyChatter() {
+//        return myChatter;
+//    }
+//
+//    public void setMyChatter(Chatter myChatter) {
+//        this.myChatter = myChatter;
+//    }
 
     public String getId() {
         return id;
@@ -109,7 +126,8 @@ public class User {
         Calendar b = getCalendar(last);
         int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
         if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)
+                        && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
             diff--;
         }
         return diff;

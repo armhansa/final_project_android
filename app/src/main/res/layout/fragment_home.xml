@@ -7,75 +7,82 @@
     android:padding="5dp"
     tools:context="com.armhansa.app.cutepid.fragment_home.HomeFragment">
 
-    <ImageView
-        android:id="@+id/profileImage"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listChat"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/firstName"
-        android:text="firstName"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.7"/>
+    </android.support.v7.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/status"
-        android:text="status"
-        android:textSize="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/profileImage"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="4" />-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
-        android:weightSum="2">
+    <!--<TextView-->
+        <!--android:id="@+id/firstName"-->
+        <!--android:text="firstName"-->
+        <!--android:textSize="30sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="0.7"/>-->
 
-        <TextView
-            android:layout_width="10dp"
-            android:layout_height="match_parent" />
+    <!--<TextView-->
+        <!--android:id="@+id/status"-->
+        <!--android:text="status"-->
+        <!--android:textSize="20sp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="0.5"/>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="0.8"-->
+        <!--android:weightSum="2">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="10dp"-->
+            <!--android:layout_height="match_parent" />-->
 
 
-        <Button
-            android:id="@+id/dislike"
-            android:text="DisLike"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="#FFF"
-            android:background="#444"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+        <!--<Button-->
+            <!--android:id="@+id/dislike"-->
+            <!--android:text="DisLike"-->
+            <!--android:textSize="30sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFF"-->
+            <!--android:background="#444"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"/>-->
 
-        <TextView
-            android:layout_width="20dp"
-            android:layout_height="match_parent" />
+        <!--<TextView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="match_parent" />-->
 
-        <Button
-            android:id="@+id/like"
-            android:text="Like"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="#FFF"
-            android:background="#F55"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+        <!--<Button-->
+            <!--android:id="@+id/like"-->
+            <!--android:text="Like"-->
+            <!--android:textSize="30sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFF"-->
+            <!--android:background="#F55"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"/>-->
 
-        <TextView
-            android:layout_width="10dp"
-            android:layout_height="match_parent" />
+        <!--<TextView-->
+            <!--android:layout_width="10dp"-->
+            <!--android:layout_height="match_parent" />-->
 
-    </LinearLayout>
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
+    <!--</LinearLayout>-->
+    <!---->
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="20dp" />-->
 
 </LinearLayout>

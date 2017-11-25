@@ -6,11 +6,12 @@ import java.util.Map;
 
 public class Chatter {
 
-    Map<String, Chat> chatter;
+    private Map<String, Chat> chatter;
 
     public Chatter() {
         chatter = new HashMap<>();
     }
+
 
     public void addChatter(String userId) {
         chatter.put(userId, new Chat());

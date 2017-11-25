@@ -8,7 +8,13 @@ public class Interest {
     private int min_age;
     private int max_age;
 
+//    Maybe must public for use firebase
     private Interest() { }
+    private Interest(String gender, int min_age, int max_age) {
+        this.gender = gender;
+        this.min_age = min_age;
+        this.max_age = max_age;
+    }
 
     public static Interest getInterest() {
         if(myInterest == null) {
@@ -17,10 +23,13 @@ public class Interest {
         return myInterest;
     }
 
-    public void setAttibute(String gender, int min_age, int max_age) {
-        this.gender = gender;
-        this.min_age = min_age;
-        this.max_age = max_age;
+    public static void setInterest(Interest interest) {
+        myInterest = interest;
+    }
+
+    public static Interest getInterest(String gender, int min_age, int max_age) {
+        myInterest = new Interest(gender, min_age, max_age);
+        return myInterest;
     }
 
     public String getGender() {
