@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.armhansa.app.cutepid.EditInfoActivity;
@@ -32,7 +33,7 @@ public class ProfileFragment extends Fragment {
     ImageView profileImage;
     TextView firstName;
 
-    ImageButton settingBtn, editInfoBtn;
+    LinearLayout settingBtn, editInfoBtn;
 
     Button facebookLogoutBtn;
 

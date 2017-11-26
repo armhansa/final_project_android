@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="4"
-    android:padding="5dp"
+    android:padding="10dp"
     android:orientation="vertical"
     tools:context="com.armhansa.app.cutepid.fragment_home.ProfileFragment">
 
@@ -23,63 +23,76 @@
     <TextView
         android:id="@+id/firstName"
         android:text="FirstName, Age"
-        android:textSize="25sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
+        android:layout_height="50dp" />
+
+    <LinearLayout
+        android:id="@+id/settingBtn"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:gravity="center">
 
-        <ImageButton
-            android:id="@+id/settingBtn"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:src="@drawable/filter"
+                android:layout_gravity="center"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+
+            <TextView
+                android:text="Setting"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:layout_width="80dp"
+                android:layout_height="30dp" />
+
+        </LinearLayout>
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="30dp"
             android:layout_height="match_parent" />
 
-        <ImageButton
+        <LinearLayout
             android:id="@+id/editInfoBtn"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <ImageView
+                android:src="@drawable/setting"
+                android:layout_gravity="center"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        android:gravity="center">
+            <TextView
+                android:text="Edit Info"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="80dp"
+                android:layout_height="30dp" />
 
-        <TextView
-            android:text="Setting"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_width="80dp"
-            android:layout_height="30dp" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:text="Edit Info"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_width="80dp"
-            android:layout_height="30dp" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="50dp" />
 
     <Button
         android:id="@+id/logoutBtn"

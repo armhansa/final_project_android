@@ -74,7 +74,7 @@ public class CommonFirebase {
     }
 
     public void getAccount(String userId) {
-        mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(userId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         firebaseGetSingleValueListener.doOnSingleDataChange(dataSnapshot);
