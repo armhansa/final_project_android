@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
+import com.armhansa.app.cutepid.validation.PhoneNumberValidation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
@@ -42,7 +43,7 @@ public class PhoneNumberLoginFragment extends Fragment
 
         progressDialog = new ProgressDialog(getContext());
 
-        phone = rootView.findViewById(R.id.phoneNumber);
+        phone = rootView.findViewById(R.id.phone);
         nextBtn = rootView.findViewById(R.id.phoneLogin);
         nextBtn.setOnClickListener(this);
 
@@ -51,14 +52,23 @@ public class PhoneNumberLoginFragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        progressDialog.setMessage("Waiting...");
-        progressDialog.show();
 
         phoneNumber = phone.getText().toString();
 
-        CommonFirebase firebase = new CommonFirebase("users");
-        firebase.setFirebaseGetSingleValueListener(this);
-        firebase.getAccount(phoneNumber);
+        PhoneNumberValidation validation = new PhoneNumberValidation();
+        validation.setPhoneNumber(phoneNumber);
+        if(validation.invalid()) {
+            Toast.makeText(getContext(), validation.alert(), Toast.LENGTH_LONG).show();
+
+        } else {
+            progressDialog.setMessage("Waiting...");
+            progressDialog.show();
+
+            CommonFirebase firebase = new CommonFirebase("users");
+            firebase.setFirebaseGetSingleValueListener(this);
+            firebase.getAccount(phoneNumber);
+
+        }
 
     }
 

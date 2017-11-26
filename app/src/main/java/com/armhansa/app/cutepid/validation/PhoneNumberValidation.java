@@ -3,22 +3,20 @@ package com.armhansa.app.cutepid.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NameValidation {
+public class PhoneNumberValidation {
 
-    String name;
+    String phoneNumber;
 
-    private String alerts[] = {
+    private static String alerts[] = {
             "Is Null"
             , "Is Empty"
-            , "Is Too Short"
-            , "Is Too Long"
+            , "Must Have 9 or 10 Number"
             , "Is Wrong Pattern"
-            // You can include new case alert at this
-            , "Passed"
-    };
+            // You can create new case alert at this
+            , "Passed"};
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public boolean invalid() {
@@ -29,13 +27,12 @@ public class NameValidation {
         List<FillRule> invalidate = new ArrayList<>();
         invalidate.add(new CaseNull());
         invalidate.add(new CaseEmpty());
-        invalidate.add(new CaseTooShort());
-        invalidate.add(new CaseTooLong());
-        invalidate.add(new CaseNameWrongPattern());
+        invalidate.add(new CasePhoneNotFit());
+        invalidate.add(new CasePhoneWrongPattern());
         // add new Case on this line
 
         int i = -1;
-        while(++i < invalidate.size() && !invalidate.get(i).validate(name));
+        while(++i < invalidate.size() && !invalidate.get(i).validate(phoneNumber));
 
         return alerts[i];
     }

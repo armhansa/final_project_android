@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.validation.NameValidation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -91,7 +92,18 @@ public class SetProfileFragment extends Fragment
     @Override
     public void onClick(View view) {
         // Easy Validation
-        if(filePath != null && firstName != null) {
+
+        NameValidation validation = new NameValidation();
+        validation.setName(firstName.getText().toString());
+
+        if(filePath == null) {
+            Toast.makeText(getContext(), "Choose some Image to continue.", Toast.LENGTH_LONG).show();
+
+        }
+        else if(validation.invalid()) {
+            Toast.makeText(getContext(), validation.alert(), Toast.LENGTH_LONG).show();
+
+        } else {
             User.getOwnerAccount().setFirstName(firstName.getText().toString());
 
             uploadImage();

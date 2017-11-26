@@ -21,6 +21,7 @@ import com.armhansa.app.cutepid.model.UserFilter;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
+import com.armhansa.app.cutepid.validation.PasswordInvalidation;
 import com.google.android.gms.tasks.Task;
 
 public class SetPasswordFragment extends Fragment
@@ -66,10 +67,12 @@ public class SetPasswordFragment extends Fragment
     @Override
     public void onClick(View view) {
         progressDialog.setMessage("Login...");
-        progressDialog.show();
 
         if(isLogin) {
-            if (User.getOwnerAccount().getPassword().equals(password.getText().toString())) {
+            progressDialog.show();
+
+            if (User.getOwnerAccount()
+                    .getPassword().equals(password.getText().toString())) {
                 login();
                 progressDialog.dismiss();
 
@@ -78,27 +81,36 @@ public class SetPasswordFragment extends Fragment
                 progressDialog.dismiss();
             }
         } else {
+
 //            Invalidation
+            PasswordInvalidation invalidation = new PasswordInvalidation();
+            invalidation.setPassword(password.getText().toString());
+            if(invalidation.invalid()) {
+                Toast.makeText(getContext(), invalidation.alert(), Toast.LENGTH_LONG).show();
 
-            // Set Value
+            } else {
+                progressDialog.show();
 
-            User.getOwnerAccount().setPassword(password.getText().toString());
+                // Set Value
+                User.getOwnerAccount().setPassword(password.getText().toString());
 
-            UserFilter myUserFilter = new UserFilter(
-                    "Men".equals(User.getOwnerAccount().getGender()) ? "Women" : "Men"
-                    , 18, User.getOwnerAccount().getAge()+12);
+                UserFilter myUserFilter = new UserFilter(
+                        "Men".equals(User.getOwnerAccount().getGender()) ? "Women" : "Men"
+                        , 18, User.getOwnerAccount().getAge()+12);
 
-            UserFelt myFelt = new UserFelt();
+                UserFelt myFelt = new UserFelt();
 
-            UserChatter myUserChatter = new UserChatter();
+                UserChatter myUserChatter = new UserChatter();
 
-            User.getOwnerAccount().setMyUserFilter(myUserFilter);
-            User.getOwnerAccount().setMyUserFelt(myFelt);
-            User.getOwnerAccount().setMyUserChatter(myUserChatter);
+                User.getOwnerAccount().setMyUserFilter(myUserFilter);
+                User.getOwnerAccount().setMyUserFelt(myFelt);
+                User.getOwnerAccount().setMyUserChatter(myUserChatter);
 
-            CommonFirebase firebase = new CommonFirebase("users");
-            firebase.setFirebaseSetValueListener(this);
-            firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
+                CommonFirebase firebase = new CommonFirebase("users");
+                firebase.setFirebaseSetValueListener(this);
+                firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
+
+            }
 
         }
 

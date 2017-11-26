@@ -52,7 +52,7 @@ public class NameValidateTesting {
         NameValidation validate = new NameValidation();
         validate.setName("Henna");
         result = validate.alert();
-        assertEquals("Saved", result);
+        assertEquals("Passed", result);
     }
 
 
