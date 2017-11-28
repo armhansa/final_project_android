@@ -25,11 +25,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
-public class HomeActivity extends AppCompatActivity
-        implements CommonFirebase.FirebaseGetSingleValueListener, CommonFirebase.FirebaseSetValueListener {
+public class HomeActivity extends AppCompatActivity {
 
     private CommonSharePreference preference;
     private ProgressDialog progressDialog;
+
+    CommonFirebase firebase;
 
     private String id_test[] = {"10210757356870183", "1549554765131256", "1609312035758079"
             , "1620676541322575", "1677606392278937", "1714682678544039", "1819681874730726"
@@ -63,9 +64,49 @@ public class HomeActivity extends AppCompatActivity
         String userId = (String) preference.read("UserID", String.class);
 
         if(userId != null) {
-            CommonFirebase firebase = new CommonFirebase("users");
-            firebase.setFirebaseGetSingleValueListener(this);
-            firebase.getAccount(userId);
+            firebase = new CommonFirebase("users");
+            firebase.setFirebaseGetSingleValueListener(
+                    new CommonFirebase.FirebaseGetSingleValueListener() {
+                        @Override
+                        public void doOnSingleDataChange(DataSnapshot dataSnapshot) {
+                            User user_tmp = dataSnapshot.getValue(User.class);
+                            if(user_tmp != null) {
+                                User.setOwnAccount(user_tmp);
+                                progressDialog.dismiss();
+
+                            } else {
+                                Toast.makeText(getApplicationContext()
+                                        , "Error null", Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+
+                        }
+
+                        @Override
+                        public void doOnSingleCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getApplicationContext()
+                                    , "Error : "+databaseError.getMessage()
+                                    , Toast.LENGTH_LONG).show();
+
+                            progressDialog.dismiss();
+                        }
+            });
+            firebase.getAccount(userId, false);
+
+            // Create the adapter that will return a fragment for each of the three
+            // primary sections of the activity.
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = findViewById(R.id.container);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+            mViewPager.setCurrentItem(0);
+            mViewPager.setCurrentItem(1);
+
+            TabLayout tabLayout = findViewById(R.id.tabs);
+
+            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         } else {
             LoginManager.getInstance().logOut();
@@ -109,61 +150,12 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void doOnSingleDataChange(DataSnapshot dataSnapshot) {
-        User user_tmp = dataSnapshot.getValue(User.class);
-        if(user_tmp != null) {
-            User.setOwnAccount(user_tmp);
-            progressDialog.dismiss();
-//            UserFilter myInterest = UserFilter.getInterest();
-//            myInterest.setAttibute("Women", 18, 25);
-//
-//            Map<String, Object> update = new HashMap<>();
-//
-//            for(String id: id_test) {
-//                update.put(id+"/myInterest", myInterest);
-//            }
-//
-//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-//            ref.child("users").updateChildren(update);
 
 
-
-            // Create the adapter that will return a fragment for each of the three
-            // primary sections of the activity.
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-            // Set up the ViewPager with the sections adapter.
-            mViewPager = findViewById(R.id.container);
-            mViewPager.setAdapter(mSectionsPagerAdapter);
-            mViewPager.setCurrentItem(1);
-
-            TabLayout tabLayout = findViewById(R.id.tabs);
-
-            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
-
-
-        } else {
-            Toast.makeText(this, "Error null", Toast.LENGTH_LONG).show();
-            progressDialog.dismiss();
-        }
-
-    }
-
-    @Override
-    public void doOnSingleCancelled(DatabaseError databaseError) {
-        Toast.makeText(this, "Error : "+databaseError.getMessage()
-                , Toast.LENGTH_LONG).show();
-
-        progressDialog.dismiss();
-    }
-
-    @Override
-    public void doOnComplete(Task<Void> task) {
-        progressDialog.dismiss();
-    }
+//    @Override
+//    public void doOnComplete(Task<Void> task) {
+//        progressDialog.dismiss();
+//    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -197,4 +189,5 @@ public class HomeActivity extends AppCompatActivity
         }
 
     }
+
 }

@@ -49,6 +49,7 @@ public class User {
     }
 
     public UserChatter getMyUserChatter() {
+        if(myUserChatter == null) myUserChatter = new UserChatter();
         return myUserChatter;
     }
 

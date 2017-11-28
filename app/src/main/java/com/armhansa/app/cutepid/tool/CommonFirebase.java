@@ -1,9 +1,9 @@
 package com.armhansa.app.cutepid.tool;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
+import android.util.Log;
 
+import com.armhansa.app.cutepid.model.UserChatter;
 import com.armhansa.app.cutepid.model.UserFelt;
 import com.armhansa.app.cutepid.model.UserFilter;
 import com.armhansa.app.cutepid.model.User;
@@ -18,17 +18,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CommonFirebase {
 
     private DatabaseReference mDatabase;
-
-    Context context;
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
 
     public interface FirebaseSetValueListener {
         void doOnComplete(Task<Void> task);
@@ -40,13 +33,19 @@ public class CommonFirebase {
     }
 
     public interface FirebaseGetMultiValueListener {
-        void doOnMultiDataChange(List<User> dataUser);
+        void doOnMultiDataChange(List<String> dataUser);
         void doOnMultiCancelled(DatabaseError databaseError);
+    }
+
+    public interface FirebaseGetChatterListener {
+        void doOnChatterDataChange(List<User> dataUser);
+        void doOnChatterCancelled(DatabaseError databaseError);
     }
 
     private FirebaseSetValueListener firebaseSetValueListener;
     private FirebaseGetSingleValueListener firebaseGetSingleValueListener;
     private FirebaseGetMultiValueListener firebaseGetMultiValueListener;
+    private FirebaseGetChatterListener firebaseGetChatterListener;
 
     public void setFirebaseSetValueListener(FirebaseSetValueListener listener) {
         this.firebaseSetValueListener = listener;
@@ -60,11 +59,19 @@ public class CommonFirebase {
         this.firebaseGetMultiValueListener = listener;
     }
 
+    public void setFirebaseGetChatterListener(FirebaseGetChatterListener listener) {
+        this.firebaseGetChatterListener = listener;
+    }
+
     public CommonFirebase(String path) {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(path);
     }
 
-    public void set(String key, Object value) {
+    public void setWithOutListener(String key, Object value) {
+        mDatabase.child(key).setValue(value);
+    }
+
+    public void setWithListener(String key, Object value) {
         mDatabase.child(key).setValue(value).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -73,22 +80,42 @@ public class CommonFirebase {
         });
     }
 
-    public void getAccount(String userId) {
-        mDatabase.child(userId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        firebaseGetSingleValueListener.doOnSingleDataChange(dataSnapshot);
+    public ValueEventListener getAccount(String userId, boolean forSingleEvent) {
+        if(forSingleEvent) {
+            mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    firebaseGetSingleValueListener.doOnSingleDataChange(dataSnapshot);
 
-                    }
+                }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        firebaseGetSingleValueListener.doOnSingleCancelled(databaseError);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    firebaseGetSingleValueListener.doOnSingleCancelled(databaseError);
 
-                    }
-                });
+                }
+            });
+            return null;
+        } else {
+            return mDatabase.child(userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    firebaseGetSingleValueListener.doOnSingleDataChange(dataSnapshot);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    firebaseGetSingleValueListener.doOnSingleCancelled(databaseError);
+
+                }
+            });
+        }
+
+
 
     }
+
 
     public void getUsersPassFilter() {
 
@@ -105,19 +132,17 @@ public class CommonFirebase {
                 UserFelt myUserFelt = User.getOwnerAccount().getMyUserFelt();
 
                 // Filter User
-                List<User> userList = new ArrayList<>();
-                int count = 0;
-                int total = 0;
+                List<String> userList = new ArrayList<>();
+
                 for (DataSnapshot i : list) {
                     User myUser = i.getValue(User.class);
-                    total++;
-                    if (!myUserFelt.hasFelt(myUser.getId())
+                    if (myUser != null && !myUser.getId().equals(User.getOwnerAccount().getId())
+                            && !myUserFelt.hasFelt(myUser.getId())
                             && myUser.getGender().equals(filter.getGender())) {
-                        count++;
-                        userList.add(myUser);
+                        userList.add(myUser.getId());
                     }
                 }
-                Toast.makeText(context, count+"/"+total, Toast.LENGTH_LONG).show();
+
                 // Setting data
                 firebaseGetMultiValueListener.doOnMultiDataChange(userList);
             }
@@ -130,5 +155,38 @@ public class CommonFirebase {
 
     }
 
+    public void getChatterUser() {
 
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> list = dataSnapshot.getChildren();
+
+                UserChatter chatter = User.getOwnerAccount().getMyUserChatter();
+
+                // Chatter User
+                List<User> userList = new ArrayList<>();
+
+                for (DataSnapshot i : list) {
+                    User myUser = i.getValue(User.class);
+                    if (myUser != null && chatter.hasChatter(myUser.getId())) {
+                        userList.add(myUser);
+                    }
+                }
+
+                // Setting data
+                firebaseGetChatterListener.doOnChatterDataChange(userList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                firebaseGetChatterListener.doOnChatterCancelled(databaseError);
+            }
+        });
+
+    }
+
+    public DatabaseReference getmDatabase() {
+        return mDatabase;
+    }
 }

@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity
         if (userId != null) {
             CommonFirebase firebase = new CommonFirebase("users");
             firebase.setFirebaseGetSingleValueListener(this);
-            firebase.getAccount(userId);
+            firebase.getAccount(userId, true);
         } else {
             goToLoginMenu();
         }

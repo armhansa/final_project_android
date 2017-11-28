@@ -1,11 +1,6 @@
 package com.armhansa.app.cutepid.fragment_home;
 
-
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,30 +13,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.armhansa.app.cutepid.R;
-import com.armhansa.app.cutepid.adapter.ChatAdapter;
-import com.armhansa.app.cutepid.firebase_cloud_message.MyFirebaseInstanceIDService;
-import com.armhansa.app.cutepid.firebase_cloud_message.SharedPrefManager;
 import com.armhansa.app.cutepid.model.User;
-import com.armhansa.app.cutepid.model.UserList;
+import com.armhansa.app.cutepid.model.UserChatter;
+import com.armhansa.app.cutepid.model.UserFelt;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment
-        implements ChatAdapter.ChatListener
-        , CommonFirebase.FirebaseGetMultiValueListener {
+public class HomeFragment extends Fragment {
 
     View rootView;
 
-    public UserList randomUserFiltered;
+    public List<String> allUserIdPassed;
     public User randomUser;
 
     TextView noUser;
@@ -49,16 +49,11 @@ public class HomeFragment extends Fragment
 
     private ImageView profile;
     private TextView firstName, status;
-    private Button likeBtn, disLikeBtn;
-//    private BroadcastReceiver broadcastReceiver;
+
+    private CommonFirebase firebase;
+    private ValueEventListener firebaseListener;
 
     private ProgressDialog progressDialog;
-
-//     tmp
-//    private ChatAdapter chatAdapter;
-//    public RecyclerView listChat;
-//
-
 
 
     public HomeFragment() {
@@ -71,13 +66,20 @@ public class HomeFragment extends Fragment
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        randomUserFiltered = new UserList();
+        initialValue();
+        setValue();
+
+        return rootView;
+    }
+
+    public void initialValue() {
+        firebase = new CommonFirebase("users");
 
         noUser = rootView.findViewById(R.id.noUser);
         noUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                refresh();
+                setValue();
             }
         });
         allContent = rootView.findViewById(R.id.allContent);
@@ -85,14 +87,14 @@ public class HomeFragment extends Fragment
         profile = rootView.findViewById(R.id.profile);
         firstName = rootView.findViewById(R.id.firstName);
         status = rootView.findViewById(R.id.status);
-        likeBtn = rootView.findViewById(R.id.like);
+        Button likeBtn = rootView.findViewById(R.id.like);
         likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 like();
             }
         });
-        disLikeBtn = rootView.findViewById(R.id.dislike);
+        Button disLikeBtn = rootView.findViewById(R.id.dislike);
         disLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,112 +102,157 @@ public class HomeFragment extends Fragment
             }
         });
 
-
-//        broadcastReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                firstName.setText(SharedPrefManager.getInstance(getContext()).getToken());
-//            }
-//        };
-//
-//        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
-
-
-//        if(SharedPrefManager.getInstance(getContext()).getToken() == null) {
-//            Toast.makeText(getContext(), "Token is Null", Toast.LENGTH_LONG).show();
-//        }
-//        Test
-//        listChat = rootView.findViewById(R.id.listChat);
-//        listChat.setLayoutManager(new LinearLayoutManager(getActivity()));
-//
-//        chatAdapter = new ChatAdapter(getActivity());
-//        chatAdapter.setListener(this);
-//
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading...");
+    }
 
+    public void setValue() {
+        progressDialog.setMessage("Loading...");
         progressDialog.show();
 
-        CommonFirebase firebase = new CommonFirebase("users");
-        firebase.setFirebaseGetMultiValueListener(this);
-        firebase.setContext(getContext());
-        firebase.getUsersPassFilter();
+        if(firebaseListener != null) {
+            firebase.getmDatabase().child(randomUser.getId()).removeEventListener(firebaseListener);
 
-
-        return rootView;
-    }
-
-    private void refresh() {
-        progressDialog.setMessage("Loading...");
-
-        progressDialog.show();
-
-        CommonFirebase firebase = new CommonFirebase("users");
-        firebase.setFirebaseGetMultiValueListener(this);
-        firebase.setContext(getContext());
-        firebase.getUsersPassFilter();
-    }
-
-
-    @Override
-    public void doOnMultiDataChange(List<User> dataUser) {
-        if(dataUser != null && dataUser.size() > 0) {
-            randomUserFiltered.setUsers(dataUser);
-
-            allContent.setVisibility(View.VISIBLE);
-            noUser.setVisibility(View.GONE);
-            switchRandom();
-
-//            chatAdapter.setUsers(dataUser);
-//            listChat.setAdapter(chatAdapter);
-
-            progressDialog.dismiss();
-        } else {
-            Toast.makeText(getContext(), "Error UserFelt and UserFilter?"
-                    , Toast.LENGTH_LONG).show();
-            progressDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void doOnMultiCancelled(DatabaseError databaseError) {
-        Toast.makeText(getContext(), "Error UserFelt and UserFilter?", Toast.LENGTH_LONG).show();
-        progressDialog.dismiss();
-    }
-
-    private void switchRandom() {
-        if(randomUserFiltered.getUsers().size() > 0) {
-            randomUser = randomUserFiltered.getRandomUser();
-
-            Glide.with(getContext())
-                    .load(randomUser.getProfile())
-//                .apply(myOption)
-                    .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(150)))
-                    .into(profile);
-            firstName.setText(randomUser.getFirstName());
-            status.setText(randomUser.getStatus());
-        } else {
-            // Show text Not Have Someone
-            allContent.setVisibility(View.GONE);
-            noUser.setVisibility(View.VISIBLE);
         }
 
+        CommonFirebase firebaseMulti = new CommonFirebase("users");
+        firebaseMulti.setFirebaseGetMultiValueListener(
+                new CommonFirebase.FirebaseGetMultiValueListener() {
+            @Override
+            public void doOnMultiDataChange(List<String> dataUser) {
+                if(dataUser != null && dataUser.size() > 0) {
+                    allUserIdPassed = dataUser;
+
+                    allContent.setVisibility(View.VISIBLE);
+                    noUser.setVisibility(View.GONE);
+
+                    Random random = new Random();
+
+                    firebase.setFirebaseGetSingleValueListener(
+                            new CommonFirebase.FirebaseGetSingleValueListener() {
+                        @Override
+                        public void doOnSingleDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue(User.class) != null) {
+                                randomUser = dataSnapshot.getValue(User.class);
+
+                                Glide.with(getContext())
+                                        .load(randomUser.getProfile())
+                                        .apply(new RequestOptions().transforms(
+                                                new CenterCrop()
+                                                , new RoundedCorners(150)))
+                                        .into(profile);
+                                firstName.setText(MessageFormat.format(
+                                        "{0}, {1}", randomUser.getFirstName()
+                                        , randomUser.getAge()));
+                                status.setText(randomUser.getStatus());
+
+                                progressDialog.dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void doOnSingleCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getContext(), "Does have someone."
+                                    , Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                        }
+                    });
+                    firebaseListener = firebase.getAccount(
+                            allUserIdPassed.get(random.nextInt(allUserIdPassed.size()))
+                            , false);
+
+                } else {
+                    // Show text Not Have Someone
+                    allContent.setVisibility(View.GONE);
+                    noUser.setVisibility(View.VISIBLE);
+
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void doOnMultiCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Error: "+databaseError.getMessage()
+                        , Toast.LENGTH_LONG)
+                        .show();
+                progressDialog.dismiss();
+            }
+        });
+        firebaseMulti.getUsersPassFilter();
+
     }
+
+
 
     private void like() {
+        progressDialog.show();
 
-        switchRandom();
+        UserFelt felt_tmp = User.getOwnerAccount().getMyUserFelt();
+        felt_tmp.addLiked(randomUser.getId());
+        User.getOwnerAccount().setMyUserFelt(felt_tmp);
+
+        String user_tmp = User.getOwnerAccount().getId();
+
+//              Old
+//            UserFilter myInterest = UserFilter.getInterest();
+//            myInterest.setAttribute("Women", 18, 25);
+//
+//            Map<String, Object> update = new HashMap<>();
+//
+//            for(String id: id_test) {
+//                update.put(id+"/myInterest", myInterest);
+//            }
+//
+//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+//            ref.child("users").updateChildren(update);
+
+//             Old
+//        Map<String, UserFelt> newFelt = new HashMap<>();
+//        newFelt.put()
+
+//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference()
+//                .child("users").child(user_tmp).updateChildren();
+
+        CommonFirebase firebase = new CommonFirebase("users");
+
+        if(randomUser.getMyUserFelt().hasLiked(user_tmp)) {
+            // Add Chat for User
+            UserChatter myChatter_tmp = User.getOwnerAccount().getMyUserChatter();
+            myChatter_tmp.addChatter(randomUser.getId());
+            User.getOwnerAccount().setMyUserChatter(myChatter_tmp);
+
+            // Add Chat for randomUser
+            UserChatter chatter_tmp = randomUser.getMyUserChatter();
+            chatter_tmp.addChatter(user_tmp);
+            randomUser.setMyUserChatter(chatter_tmp);
+
+            firebase.setWithOutListener(randomUser.getId(), randomUser);
+
+        }
+
+        firebase.setWithOutListener(User.getOwnerAccount().getId(), User.getOwnerAccount());
+
+        setValue();
+
+        progressDialog.dismiss();
+
 
     }
 
     private void disLike() {
+        progressDialog.show();
 
-        switchRandom();
+        UserFelt felt_tmp = User.getOwnerAccount().getMyUserFelt();
+        felt_tmp.addDisLiked(randomUser.getId());
+        User.getOwnerAccount().setMyUserFelt(felt_tmp);
+
+        CommonFirebase firebase = new CommonFirebase("users");
+
+        firebase.setWithOutListener(User.getOwnerAccount().getId(), User.getOwnerAccount());
+
+        setValue();
+
+        progressDialog.dismiss();
 
     }
 
-    @Override
-    public void onClickInItem(int position) {
-
-    }
 }

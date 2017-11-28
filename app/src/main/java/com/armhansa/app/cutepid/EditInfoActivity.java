@@ -99,7 +99,7 @@ public class EditInfoActivity extends AppCompatActivity
 
             CommonFirebase firebase = new CommonFirebase("users");
             firebase.setFirebaseSetValueListener(this);
-            firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
+            firebase.setWithListener(User.getOwnerAccount().getId(), User.getOwnerAccount());
 
         }
 
@@ -112,4 +112,6 @@ public class EditInfoActivity extends AppCompatActivity
         progressDialog.dismiss();
 
     }
+
+
 }

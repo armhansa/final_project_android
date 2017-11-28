@@ -120,7 +120,7 @@ public class SetGenderFragment extends Fragment
 
             CommonFirebase firebase = new CommonFirebase("users");
             firebase.setFirebaseSetValueListener(this);
-            firebase.set(userId, User.getOwnerAccount());
+            firebase.setWithListener(userId, User.getOwnerAccount());
 
         } else {
 

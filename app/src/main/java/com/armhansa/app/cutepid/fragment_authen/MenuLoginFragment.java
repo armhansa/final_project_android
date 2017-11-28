@@ -80,7 +80,7 @@ public class MenuLoginFragment extends Fragment
 
                         CommonFirebase firebase = new CommonFirebase("users");
                         firebase.setFirebaseGetSingleValueListener(MenuLoginFragment.this);
-                        firebase.getAccount(profile.getId());
+                        firebase.getAccount(profile.getId(), true);
 
 
                     } catch (Exception ex) {

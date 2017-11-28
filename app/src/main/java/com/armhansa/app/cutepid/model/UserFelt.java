@@ -6,7 +6,7 @@ import java.util.Map;
 public class UserFelt {
 
     // Put User Felt Another (0 = disLiked, 1 = liked)
-    Map<String, Integer> felt;
+    private Map<String, Integer> felt;
 
     public UserFelt() {
         felt = new HashMap<>();
@@ -23,6 +23,10 @@ public class UserFelt {
 
     public boolean hasFelt(String userId) {
         return felt.get(userId) != null;
+    }
+
+    public boolean hasLiked(String userId) {
+        return felt.get(userId) != null && felt.get(userId) == 1;
     }
 
     public boolean isLike(String userId) {

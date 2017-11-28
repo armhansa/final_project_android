@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
     android:padding="10dp"
     tools:context="com.armhansa.app.cutepid.EditInfoActivity">
 
     <TextView
         android:text="Edit Info"
-        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textSize="35sp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="0dp"

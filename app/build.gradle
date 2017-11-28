@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.armhansa.app.cutepid"
         minSdkVersion 18
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -60,6 +60,9 @@ dependencies {
 
     // For user Glide
     compile 'com.github.bumptech.glide:glide:4.3.0'
+
+    // Add for use RangeSeekBar
+    compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
 }
 
 // Add for use Firebase NoSQL Database

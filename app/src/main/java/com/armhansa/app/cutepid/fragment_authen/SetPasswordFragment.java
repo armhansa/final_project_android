@@ -108,7 +108,7 @@ public class SetPasswordFragment extends Fragment
 
                 CommonFirebase firebase = new CommonFirebase("users");
                 firebase.setFirebaseSetValueListener(this);
-                firebase.set(User.getOwnerAccount().getId(), User.getOwnerAccount());
+                firebase.setWithListener(User.getOwnerAccount().getId(), User.getOwnerAccount());
 
             }
 

@@ -66,7 +66,7 @@ public class PhoneNumberLoginFragment extends Fragment
 
             CommonFirebase firebase = new CommonFirebase("users");
             firebase.setFirebaseGetSingleValueListener(this);
-            firebase.getAccount(phoneNumber);
+            firebase.getAccount(phoneNumber, true);
 
         }
 
