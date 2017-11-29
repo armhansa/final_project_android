@@ -21,7 +21,6 @@ import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
@@ -32,23 +31,8 @@ public class HomeActivity extends AppCompatActivity {
 
     CommonFirebase firebase;
 
-    private String id_test[] = {"10210757356870183", "1549554765131256", "1609312035758079"
-            , "1620676541322575", "1677606392278937", "1714682678544039", "1819681874730726"
-            , "2031094127128098", "2173016396057118", "0909828682", "0914939888"};
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
@@ -82,14 +66,6 @@ public class HomeActivity extends AppCompatActivity {
 
                         }
 
-                        @Override
-                        public void doOnSingleCancelled(DatabaseError databaseError) {
-                            Toast.makeText(getApplicationContext()
-                                    , "Error : "+databaseError.getMessage()
-                                    , Toast.LENGTH_LONG).show();
-
-                            progressDialog.dismiss();
-                        }
             });
             firebase.getAccount(userId, false);
 
@@ -100,8 +76,9 @@ public class HomeActivity extends AppCompatActivity {
             // Set up the ViewPager with the sections adapter.
             mViewPager = findViewById(R.id.container);
             mViewPager.setAdapter(mSectionsPagerAdapter);
-            mViewPager.setCurrentItem(0);
-            mViewPager.setCurrentItem(1);
+
+//            ItMakeTestFailed
+//            mViewPager.setCurrentItem(1);
 
             TabLayout tabLayout = findViewById(R.id.tabs);
 
@@ -150,17 +127,6 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-//    @Override
-//    public void doOnComplete(Task<Void> task) {
-//        progressDialog.dismiss();
-//    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

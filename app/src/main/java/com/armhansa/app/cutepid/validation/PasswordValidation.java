@@ -3,7 +3,7 @@ package com.armhansa.app.cutepid.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PasswordInvalidation {
+public class PasswordValidation {
 
     String password;
 

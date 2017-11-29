@@ -149,12 +149,6 @@ public class HomeFragment extends Fragment {
                             }
                         }
 
-                        @Override
-                        public void doOnSingleCancelled(DatabaseError databaseError) {
-                            Toast.makeText(getContext(), "Does have someone."
-                                    , Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
-                        }
                     });
                     firebaseListener = firebase.getAccount(
                             allUserIdPassed.get(random.nextInt(allUserIdPassed.size()))
@@ -169,13 +163,6 @@ public class HomeFragment extends Fragment {
                 }
             }
 
-            @Override
-            public void doOnMultiCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Error: "+databaseError.getMessage()
-                        , Toast.LENGTH_LONG)
-                        .show();
-                progressDialog.dismiss();
-            }
         });
         firebaseMulti.getUsersPassFilter();
 

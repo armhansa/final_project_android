@@ -4,55 +4,55 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-public class NameValidateTesting {
+public class NameValidateTest {
 
     String result;
 
     @Test
     public void nameIsNull() {
         NameValidation validation = new NameValidation();
-        result = validation.alert();
-        assertEquals("Is Null", result);
+        assertEquals(true, validation.invalid());
+        assertEquals("Is Null", validation.alert());
     }
 
     @Test
     public void nameIsEmpty() {
         NameValidation validation = new NameValidation();
         validation.setName("");
-        result = validation.alert();
-        assertEquals("Is Empty", result);
+        assertEquals(true, validation.invalid());
+        assertEquals("Is Empty", validation.alert());
     }
 
     @Test
     public void nameTooShort() {
         NameValidation validation = new NameValidation();
         validation.setName("H");
-        result = validation.alert();
-        assertEquals("Is Too Short", result);
+        assertEquals(true, validation.invalid());
+        assertEquals("Is Too Short", validation.alert());
     }
 
     @Test
     public void nameTooLong() {
         NameValidation validation = new NameValidation();
         validation.setName("HelloMyNameIsHansathon");
-        result = validation.alert();
-        assertEquals("Is Too Long", result);
+        assertEquals(true, validation.invalid());
+        assertEquals("Is Too Long", validation.alert());
     }
 
     @Test
     public void nameWrongPattern() {
         NameValidation validation = new NameValidation();
         validation.setName("lnw999");
-        result = validation.alert();
-        assertEquals("Is Wrong Pattern", result);
+        assertEquals(true, validation.invalid());
+        assertEquals("Is Wrong Pattern", validation.alert());
     }
 
     @Test
     public void nameIsCorrect() {
-        NameValidation validate = new NameValidation();
-        validate.setName("Henna");
-        result = validate.alert();
-        assertEquals("Passed", result);
+        NameValidation validation = new NameValidation();
+        validation.setName("Henna");
+        assertEquals(false, validation.invalid());
+        assertEquals("Passed", validation.alert());
     }
 
 

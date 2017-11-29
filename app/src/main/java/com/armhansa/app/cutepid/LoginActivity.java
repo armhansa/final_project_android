@@ -52,12 +52,6 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void doOnSingleCancelled(DatabaseError databaseError) {
-        goToLoginMenu();
-
-    }
-
     private void goToHome() {
         Intent goToHome = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(goToHome);

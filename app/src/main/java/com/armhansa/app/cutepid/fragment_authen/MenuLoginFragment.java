@@ -152,11 +152,6 @@ public class MenuLoginFragment extends Fragment
         }
     }
 
-    @Override
-    public void doOnSingleCancelled(DatabaseError databaseError) {
-        Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
-    }
-
     private void nextPageLogin() {
         User user_tmp = new User();
         user_tmp.setFacebookUser(false);

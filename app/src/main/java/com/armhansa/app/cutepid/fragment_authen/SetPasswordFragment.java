@@ -21,7 +21,7 @@ import com.armhansa.app.cutepid.model.UserFilter;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
-import com.armhansa.app.cutepid.validation.PasswordInvalidation;
+import com.armhansa.app.cutepid.validation.PasswordValidation;
 import com.google.android.gms.tasks.Task;
 
 public class SetPasswordFragment extends Fragment
@@ -83,7 +83,7 @@ public class SetPasswordFragment extends Fragment
         } else {
 
 //            Invalidation
-            PasswordInvalidation invalidation = new PasswordInvalidation();
+            PasswordValidation invalidation = new PasswordValidation();
             invalidation.setPassword(password.getText().toString());
             if(invalidation.invalid()) {
                 Toast.makeText(getContext(), invalidation.alert(), Toast.LENGTH_LONG).show();

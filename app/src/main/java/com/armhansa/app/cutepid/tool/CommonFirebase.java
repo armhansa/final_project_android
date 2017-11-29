@@ -29,17 +29,14 @@ public class CommonFirebase {
 
     public interface FirebaseGetSingleValueListener {
         void doOnSingleDataChange(DataSnapshot dataSnapshot);
-        void doOnSingleCancelled(DatabaseError databaseError);
     }
 
     public interface FirebaseGetMultiValueListener {
         void doOnMultiDataChange(List<String> dataUser);
-        void doOnMultiCancelled(DatabaseError databaseError);
     }
 
     public interface FirebaseGetChatterListener {
         void doOnChatterDataChange(List<User> dataUser);
-        void doOnChatterCancelled(DatabaseError databaseError);
     }
 
     private FirebaseSetValueListener firebaseSetValueListener;
@@ -91,7 +88,6 @@ public class CommonFirebase {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    firebaseGetSingleValueListener.doOnSingleCancelled(databaseError);
 
                 }
             });
@@ -106,7 +102,6 @@ public class CommonFirebase {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    firebaseGetSingleValueListener.doOnSingleCancelled(databaseError);
 
                 }
             });
@@ -149,7 +144,6 @@ public class CommonFirebase {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                firebaseGetMultiValueListener.doOnMultiCancelled(databaseError);
             }
         });
 
@@ -180,7 +174,6 @@ public class CommonFirebase {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                firebaseGetChatterListener.doOnChatterCancelled(databaseError);
             }
         });
 

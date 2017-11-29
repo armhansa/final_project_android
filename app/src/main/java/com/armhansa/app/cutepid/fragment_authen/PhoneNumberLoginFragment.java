@@ -96,8 +96,4 @@ public class PhoneNumberLoginFragment extends Fragment
         progressDialog.dismiss();
     }
 
-    @Override
-    public void doOnSingleCancelled(DatabaseError databaseError) {
-        Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
-    }
 }

@@ -96,11 +96,7 @@ public class SetProfileFragment extends Fragment
         NameValidation validation = new NameValidation();
         validation.setName(firstName.getText().toString());
 
-        if(filePath == null) {
-            Toast.makeText(getContext(), "Choose some Image to continue.", Toast.LENGTH_LONG).show();
-
-        }
-        else if(validation.invalid()) {
+        if(validation.invalid()) {
             Toast.makeText(getContext(), validation.alert(), Toast.LENGTH_LONG).show();
 
         } else {
@@ -150,6 +146,17 @@ public class SetProfileFragment extends Fragment
                     progressDialog.setMessage("Uploaded"+ (int) process+"%");
                 }
             });
+        } else {
+            User.getOwnerAccount().setProfile(
+                    "https://firebasestorage.googleapis.com/" +
+                            "v0/b/cutepid-7bc10.appspot.com/o/" +
+                            "profileImages%2F0.png?" +
+                            "alt=media&token=c03b6ae1-2b1b-442c-9001-740b2cae3d09");
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.mainLoginFragment, new SetBirthDayFragment())
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 

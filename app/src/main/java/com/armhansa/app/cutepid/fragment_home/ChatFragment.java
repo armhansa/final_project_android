@@ -88,8 +88,4 @@ public class ChatFragment extends Fragment
         }
     }
 
-    @Override
-    public void doOnChatterCancelled(DatabaseError databaseError) {
-        Toast.makeText(getContext(), "Error: "+databaseError.getMessage(), Toast.LENGTH_LONG).show();
-    }
 }
