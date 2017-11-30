@@ -15,7 +15,10 @@ import com.armhansa.app.cutepid.R;
 
 public class CommonNotification {
 
-    Context context;
+    //Singleton
+    private static CommonNotification notiInstance;
+
+    private Context context;
 
     private int count = 0;
 
@@ -26,11 +29,14 @@ public class CommonNotification {
     private String message;
     private int image;
 
-    public CommonNotification (Context context) {
-        this.context = context;
+    public static CommonNotification getInstance(Context context, String title) {
+        if(notiInstance == null)
+            notiInstance = new CommonNotification(context, title);
+
+        return notiInstance;
     }
 
-    public CommonNotification (Context context, String title) {
+    private CommonNotification (Context context, String title) {
         this.context = context;
     }
 

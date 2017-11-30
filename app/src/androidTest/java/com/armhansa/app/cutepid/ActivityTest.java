@@ -210,13 +210,113 @@ public class ActivityTest {
         onView(allOf(withId(R.id.women))).perform(click());
         onView(allOf(withId(R.id.nextBtn))).perform(click());
         onView(allOf(withId(R.id.logoutBtn))).perform(click());
-
-        SystemClock.sleep(500);
-
         onView(allOf(withId(R.id.facebookBtn))).perform(click());
         onView(allOf(withId(R.id.logoutBtn))).perform(click());
 
     }
+
+    @Test
+    public void setFilterTest() {
+        SystemClock.sleep(1000);
+
+        onView(allOf(withId(R.id.facebookBtn))).perform(click());
+
+        onView(allOf(withId(R.id.settingBtn))).perform(click());
+        onView(allOf(withId(R.id.men))).perform(click());
+        onView(allOf(withId(R.id.women))).perform(click());
+        onView(allOf(withId(R.id.set))).perform(click());
+        onView(allOf(withId(R.id.logoutBtn))).perform(click());
+
+    }
+
+    @Test
+    public void editInfoTest() {
+        SystemClock.sleep(1000);
+
+        onView(allOf(withId(R.id.facebookBtn))).perform(click());
+
+        onView(allOf(withId(R.id.editInfoBtn))).perform(click());
+        onView(allOf(withId(R.id.firstName))).perform(click());
+        onView(allOf(withId(R.id.firstName))).perform(replaceText("Hansa")
+                , closeSoftKeyboard());
+        onView(allOf(withId(R.id.women))).perform(click());
+        onView(allOf(withId(R.id.men))).perform(click());
+        onView(allOf(withId(R.id.status))).perform(replaceText("ไม่โสดแล้ว")
+                , closeSoftKeyboard());
+        onView(allOf(withId(R.id.edit))).perform(click());
+
+        onView(withId(R.id.logoutBtn)).perform(click());
+
+    }
+
+    @Test
+    public void likeNotMatchTest() {
+        SystemClock.sleep(1000);
+
+        // Delete firebase data
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase.child("2031094127128098").child("myUserChatter").removeValue();
+        mDatabase.child("2031094127128098").child("myUserFelt").removeValue();
+        mDatabase.child("0909828682").child("myUserChatter").removeValue();
+
+        onView(allOf(withId(R.id.facebookBtn))).perform(click());
+
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 1)))
+                .perform(click());
+        onView(allOf(withId(R.id.like))).perform(click());
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 0)))
+                .perform(click());
+
+        onView(allOf(withId(R.id.logoutBtn))).perform(click());
+
+    }
+
+    @Test
+    public void likeAndMatchTest() {
+        SystemClock.sleep(1000);
+
+        // Delete firebase data
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase.child("2031094127128098").child("myUserChatter").removeValue();
+        mDatabase.child("2031094127128098").child("myUserFelt").removeValue();
+        mDatabase.child("0909828682").child("myUserChatter").removeValue();
+
+        onView(allOf(withId(R.id.facebookBtn))).perform(click());
+
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 1)))
+                .perform(click());
+        onView(allOf(withId(R.id.like))).perform(click());
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 0)))
+                .perform(click());
+
+        onView(allOf(withId(R.id.logoutBtn))).perform(click());
+
+    }
+
+    @Test
+    public void disLikeTest() {
+        SystemClock.sleep(1000);
+
+        // Delete firebase data
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase.child("2031094127128098").child("myUserChatter").removeValue();
+        mDatabase.child("2031094127128098").child("myUserFelt").removeValue();
+        mDatabase.child("0909828682").child("myUserChatter").removeValue();
+
+        onView(allOf(withId(R.id.facebookBtn))).perform(click());
+
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 1)))
+                .perform(click());
+        onView(allOf(withId(R.id.like))).perform(click());
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 0)))
+                .perform(click());
+
+        onView(allOf(withId(R.id.logoutBtn))).perform(click());
+
+    }
+
+
+
 
 
 

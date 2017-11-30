@@ -17,6 +17,7 @@ import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.model.UserChatter;
 import com.armhansa.app.cutepid.model.UserFelt;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
+import com.armhansa.app.cutepid.tool.CommonNotification;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -34,9 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomeFragment extends Fragment {
 
     View rootView;
@@ -179,29 +177,14 @@ public class HomeFragment extends Fragment {
 
         String user_tmp = User.getOwnerAccount().getId();
 
-//              Old
-//            UserFilter myInterest = UserFilter.getInterest();
-//            myInterest.setAttribute("Women", 18, 25);
-//
-//            Map<String, Object> update = new HashMap<>();
-//
-//            for(String id: id_test) {
-//                update.put(id+"/myInterest", myInterest);
-//            }
-//
-//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-//            ref.child("users").updateChildren(update);
-
-//             Old
-//        Map<String, UserFelt> newFelt = new HashMap<>();
-//        newFelt.put()
-
-//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference()
-//                .child("users").child(user_tmp).updateChildren();
-
         CommonFirebase firebase = new CommonFirebase("users");
 
         if(randomUser.getMyUserFelt().hasLiked(user_tmp)) {
+            // Notification
+            CommonNotification notification = CommonNotification
+                    .getInstance(getContext(), "You have New Match");
+            notification.notify("You and "+ randomUser.getFirstName()+ " now Match. Let's see.");
+
             // Add Chat for User
             UserChatter myChatter_tmp = User.getOwnerAccount().getMyUserChatter();
             myChatter_tmp.addChatter(randomUser.getId());

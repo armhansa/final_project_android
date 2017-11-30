@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.tool.GetPostImage;
 import com.armhansa.app.cutepid.validation.NameValidation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -109,6 +111,15 @@ public class SetProfileFragment extends Fragment
     }
 
     private void uploadImage() {
+
+//        if(filePath == null) {
+//            Uri tmp = Uri.parse("https://firebasestorage.googleapis.com/v0/b/cutepid-7bc10." +
+//                    "appspot.com/o/profileImages%2F0.png?alt=media&token=c03b6ae1-2b1b-442c" +
+//                    "-9001-740b2cae3d09");
+//            filePath = tmp;
+//        }
+
+
         if(filePath != null) {
 
             progressDialog.show();
