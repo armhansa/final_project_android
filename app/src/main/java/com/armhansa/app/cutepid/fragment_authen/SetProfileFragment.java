@@ -123,6 +123,8 @@ public class SetProfileFragment extends Fragment
 
 
         if(filePath != null) {
+            Toast.makeText(getContext(), filePath.toString(), Toast.LENGTH_LONG).show();
+
             CommonFirebaseStorage storage = new CommonFirebaseStorage();
             storage.uploadProfile(progressDialog, filePath, getActivity());
 

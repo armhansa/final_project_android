@@ -37,7 +37,7 @@
 
     <Button
         android:id="@+id/loginBtn"
-        android:text="Login"
+        android:text="@string/login"
         android:textSize="20sp"
         android:textColor="#FFFFFF"
         android:background="#FF77AA"

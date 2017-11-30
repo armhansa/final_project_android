@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/noUser"
-        android:text="Not have someone.            Please tab to refresh."
+        android:text="@string/please_tab_to_refresh"
         android:textSize="25sp"
         android:textColor="#FF0000"
         android:gravity="center"
@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/firstName"
-            android:text="firstName"
+            android:text="@string/firstname"
             android:textSize="30sp"
             android:textStyle="bold"
             android:gravity="center_vertical"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/status"
-            android:text="status"
+            android:text="@string/status"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -62,7 +62,7 @@
 
             <Button
                 android:id="@+id/dislike"
-                android:text="DisLike"
+                android:text="@string/dislike"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:textColor="#FFF"
@@ -77,7 +77,7 @@
 
             <Button
                 android:id="@+id/like"
-                android:text="Like"
+                android:text="@string/like"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:textColor="#FFF"

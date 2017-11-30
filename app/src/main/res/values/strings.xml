@@ -15,10 +15,33 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_edit_info">EditInfoActivity</string>
     <string name="your_birthday">Your BirthDay</string>
-    <string name="next">Next</string>
     <string name="your_profile">Your Profile</string>
-    <string name="first_name">  First Name</string>
     <string name="your_password">Your Password</string>
     <string name="login">Login</string>
+    <string name="edit_info">Edit Info</string>
+    <string name="first_name">First Name</string>
+    <string name="gender">Gender</string>
+    <string name="men">Men</string>
+    <string name="women">Women</string>
+    <string name="status_optional">Status (optional)</string>
+    <string name="edit">Edit</string>
+    <string name="profile">Profile</string>
+    <string name="home">Home</string>
+    <string name="chat">Chat</string>
+    <string name="search_setting">Search Setting</string>
+    <string name="what_you_want_to_see">(What you want to see)</string>
+    <string name="not_match_go_to_home_to_match_new_chat">Not match go to home to match new chat</string>
+    <string name="please_tab_to_refresh">Please tab to refresh.</string>
+    <string name="firstname">firstName</string>
+    <string name="status">status</string>
+    <string name="dislike">DisLike</string>
+    <string name="like">Like</string>
+    <string name="your_phoneNumber">Your PhoneNumber</string>
+    <string name="next">Next</string>
+    <string name="firstname_age">FirstName, Age</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Logout</string>
+    <string name="your_gender">Your Gender</string>
+    <string name="status2">Status</string>
 
 </resources>

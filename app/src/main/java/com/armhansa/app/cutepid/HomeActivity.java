@@ -1,7 +1,6 @@
 package com.armhansa.app.cutepid;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
@@ -11,7 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.armhansa.app.cutepid.fragment_home.ChatFragment;
@@ -20,20 +18,13 @@ import com.armhansa.app.cutepid.fragment_home.ProfileFragment;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.tool.CommonSharePreference;
-import com.facebook.login.LoginManager;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private CommonSharePreference preference;
     private ProgressDialog progressDialog;
 
     CommonFirebase firebase;
-
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
-        preference = new CommonSharePreference(this);
+        CommonSharePreference preference = new CommonSharePreference(this);
         String userId = (String) preference.read("UserID", String.class);
 
         if(userId != null) {
@@ -71,10 +62,10 @@ public class HomeActivity extends AppCompatActivity {
 
             // Create the adapter that will return a fragment for each of the three
             // primary sections of the activity.
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+            SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
             // Set up the ViewPager with the sections adapter.
-            mViewPager = findViewById(R.id.container);
+            ViewPager mViewPager = findViewById(R.id.container);
             mViewPager.setAdapter(mSectionsPagerAdapter);
 
 //            ItMakeTestFailed
@@ -85,18 +76,6 @@ public class HomeActivity extends AppCompatActivity {
             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
             tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        } else {
-            LoginManager.getInstance().logOut();
-//
-            CommonSharePreference preference = new CommonSharePreference(this);
-            preference.clear();
-
-            Intent logout = new Intent(HomeActivity.this, LoginActivity.class);
-            startActivity(logout);
-            finish();
-
-            Toast.makeText(this, "Error userId is Null", Toast.LENGTH_LONG).show();
-            progressDialog.dismiss();
         }
 
 
@@ -112,24 +91,9 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

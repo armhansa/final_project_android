@@ -13,7 +13,7 @@
         android:layout_height="50dp" />
 
     <TextView
-        android:text="Your Gender"
+        android:text="@string/your_gender"
         android:textColor="@color/white"
         android:textSize="35sp"
         android:gravity="center"
@@ -29,7 +29,7 @@
         android:padding="10dp">
         <Button
             android:id="@+id/men"
-            android:text="Men"
+            android:text="@string/men"
             android:background="#9999FF"
             android:textSize="25sp"
             android:layout_width="0dp"
@@ -40,7 +40,7 @@
             android:layout_height="match_parent" />
         <Button
             android:id="@+id/women"
-            android:text="Women"
+            android:text="@string/women"
             android:background="#FFFFFF"
             android:textSize="25sp"
             android:layout_width="0dp"
@@ -63,7 +63,7 @@
 
         <Button
             android:id="@+id/nextBtn"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="#FFF"
             android:textSize="25sp"
             android:background="#FF5555"

@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/noChater"
-        android:text="Not match go to home to match new chat"
+        android:text="@string/not_match_go_to_home_to_match_new_chat"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

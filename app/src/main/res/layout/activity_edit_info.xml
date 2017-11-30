@@ -6,10 +6,11 @@
     android:orientation="vertical"
     android:background="@color/background"
     android:padding="10dp"
+    android:weightSum="4"
     tools:context="com.armhansa.app.cutepid.EditInfoActivity">
 
     <TextView
-        android:text="Edit Info"
+        android:text="@string/edit_info"
         android:textStyle="bold"
         android:textSize="35sp"
         android:gravity="center"
@@ -18,7 +19,7 @@
         android:layout_weight="1"/>
 
     <TextView
-        android:text="First Name"
+        android:text="@string/first_name"
         android:textSize="25sp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -33,7 +34,7 @@
         android:ems="10" />
 
     <TextView
-        android:text="Gender"
+        android:text="@string/gender"
         android:textSize="25sp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -48,7 +49,7 @@
         android:padding="10dp">
         <Button
             android:id="@+id/men"
-            android:text="Men"
+            android:text="@string/men"
             android:background="#9999FF"
             android:textSize="25sp"
             android:layout_width="0dp"
@@ -59,7 +60,7 @@
             android:layout_height="match_parent" />
         <Button
             android:id="@+id/women"
-            android:text="Women"
+            android:text="@string/women"
             android:background="#FFFFFF"
             android:textSize="25sp"
             android:layout_width="0dp"
@@ -68,7 +69,7 @@
     </LinearLayout>
 
     <TextView
-        android:text="Status (optional)"
+        android:text="@string/status_optional"
         android:textSize="25sp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -81,7 +82,7 @@
 
     <Button
         android:id="@+id/edit"
-        android:text="Edit"
+        android:text="@string/edit"
         android:textColor="#FFF"
         android:textSize="25sp"
         android:background="#FF5555"
