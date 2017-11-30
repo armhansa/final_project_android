@@ -79,6 +79,54 @@ public class ActivityTest {
     @Rule
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
 
+
+    @Test
+    public void likeAndMatchTest() {
+        SystemClock.sleep(1000);
+
+        // Delete firebase data
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase.child("2031094127128098").child("myUserChatter").removeValue();
+        mDatabase.child("2031094127128098").child("myUserFelt").removeValue();
+        mDatabase.child("0909828682").child("myUserChatter").removeValue();
+
+        onView(allOf(withId(R.id.facebookBtn))).perform(click());
+
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 1)))
+                .perform(click());
+        for(int i=0; i<7; i++) {
+            onView(allOf(withId(R.id.like))).perform(click());
+            SystemClock.sleep(2000);
+        }
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 0)))
+                .perform(click());
+
+        onView(allOf(withId(R.id.logoutBtn))).perform(click());
+
+    }
+
+    @Test
+    public void disLikeTest() {
+        SystemClock.sleep(1000);
+
+        // Delete firebase data
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase.child("2031094127128098").child("myUserChatter").removeValue();
+        mDatabase.child("2031094127128098").child("myUserFelt").removeValue();
+        mDatabase.child("0909828682").child("myUserChatter").removeValue();
+
+        onView(allOf(withId(R.id.facebookBtn))).perform(click());
+
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 1)))
+                .perform(click());
+        onView(allOf(withId(R.id.dislike))).perform(click());
+        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 0)))
+                .perform(click());
+
+        onView(allOf(withId(R.id.logoutBtn))).perform(click());
+
+    }
+
     @Test
     public void registerWomenUserTest() {
         SystemClock.sleep(1000);
@@ -279,53 +327,6 @@ public class ActivityTest {
         onView(allOf(withId(R.id.edit))).perform(click());
 
         onView(withId(R.id.logoutBtn)).perform(click());
-
-    }
-
-    @Test
-    public void likeAndMatchTest() {
-        SystemClock.sleep(1000);
-
-        // Delete firebase data
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        mDatabase.child("2031094127128098").child("myUserChatter").removeValue();
-        mDatabase.child("2031094127128098").child("myUserFelt").removeValue();
-        mDatabase.child("0909828682").child("myUserChatter").removeValue();
-
-        onView(allOf(withId(R.id.facebookBtn))).perform(click());
-
-        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 1)))
-                .perform(click());
-        for(int i=0; i<7; i++) {
-            onView(allOf(withId(R.id.like))).perform(click());
-            SystemClock.sleep(2000);
-        }
-        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 0)))
-                .perform(click());
-
-        onView(allOf(withId(R.id.logoutBtn))).perform(click());
-
-    }
-
-    @Test
-    public void disLikeTest() {
-        SystemClock.sleep(1000);
-
-        // Delete firebase data
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        mDatabase.child("2031094127128098").child("myUserChatter").removeValue();
-        mDatabase.child("2031094127128098").child("myUserFelt").removeValue();
-        mDatabase.child("0909828682").child("myUserChatter").removeValue();
-
-        onView(allOf(withId(R.id.facebookBtn))).perform(click());
-
-        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 1)))
-                .perform(click());
-        onView(allOf(withId(R.id.dislike))).perform(click());
-        onView(allOf(childAtPosition(childAtPosition(withId(R.id.tabs), 0), 0)))
-                .perform(click());
-
-        onView(allOf(withId(R.id.logoutBtn))).perform(click());
 
     }
 
