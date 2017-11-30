@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.User;
+import com.armhansa.app.cutepid.tool.CommonFirebaseStorage;
+import com.armhansa.app.cutepid.tool.CommonSharePreference;
 import com.armhansa.app.cutepid.tool.GetPostImage;
 import com.armhansa.app.cutepid.validation.NameValidation;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -121,42 +123,9 @@ public class SetProfileFragment extends Fragment
 
 
         if(filePath != null) {
+            CommonFirebaseStorage storage = new CommonFirebaseStorage();
+            storage.uploadProfile(progressDialog, filePath, getActivity());
 
-            progressDialog.show();
-
-            StorageReference ref = storageRef.child("profileImages/"
-                    + User.getOwnerAccount().getId());
-            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
-
-                    User.getOwnerAccount().setProfile(taskSnapshot.getDownloadUrl().toString());
-
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainLoginFragment, new SetBirthDayFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "Failed "+e.getMessage()
-                            , Toast.LENGTH_SHORT).show();
-                }
-            })
-            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    double process = (100.0 * taskSnapshot.getBytesTransferred()
-                            /taskSnapshot.getTotalByteCount());
-                    progressDialog.setMessage("Uploaded"+ (int) process+"%");
-                }
-            });
         } else {
             User.getOwnerAccount().setProfile(
                     "https://firebasestorage.googleapis.com/" +

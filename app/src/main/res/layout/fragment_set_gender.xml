@@ -14,6 +14,7 @@
 
     <TextView
         android:text="Your Gender"
+        android:textColor="@color/white"
         android:textSize="35sp"
         android:gravity="center"
         android:layout_width="match_parent"

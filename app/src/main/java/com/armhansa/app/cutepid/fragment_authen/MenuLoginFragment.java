@@ -90,20 +90,15 @@ public class MenuLoginFragment extends Fragment
                         progressDialog.dismiss();
                     }
 
-                } else {
-                    Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_LONG).show();
-
                 }
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
 
