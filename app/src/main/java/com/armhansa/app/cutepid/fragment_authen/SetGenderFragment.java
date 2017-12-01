@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.armhansa.app.cutepid.HomeActivity;
+import com.armhansa.app.cutepid.controller.HomeActivity;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.UserChatter;
 import com.armhansa.app.cutepid.model.UserFilter;

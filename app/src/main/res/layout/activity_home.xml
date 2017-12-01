@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context="com.armhansa.app.cutepid.HomeActivity">
+    tools:context="com.armhansa.app.cutepid.controller.HomeActivity">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"

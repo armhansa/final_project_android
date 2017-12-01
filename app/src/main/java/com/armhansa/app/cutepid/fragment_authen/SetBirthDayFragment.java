@@ -1,7 +1,5 @@
 package com.armhansa.app.cutepid.fragment_authen;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +9,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
-import com.armhansa.app.cutepid.LoginActivity;
 import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.User;
 

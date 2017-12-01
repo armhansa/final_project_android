@@ -1,6 +1,5 @@
 package com.armhansa.app.cutepid.tool;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,7 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 
-import com.armhansa.app.cutepid.HomeActivity;
+import com.armhansa.app.cutepid.controller.HomeActivity;
 import com.armhansa.app.cutepid.R;
 
 public class CommonNotification {

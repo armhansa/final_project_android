@@ -1,4 +1,4 @@
-package com.armhansa.app.cutepid;
+package com.armhansa.app.cutepid.controller;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.model.User;
 import com.armhansa.app.cutepid.tool.CommonFirebase;
 import com.armhansa.app.cutepid.validation.NameValidation;

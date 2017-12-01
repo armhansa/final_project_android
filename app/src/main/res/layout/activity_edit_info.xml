@@ -7,7 +7,7 @@
     android:background="@color/background"
     android:padding="10dp"
     android:weightSum="4"
-    tools:context="com.armhansa.app.cutepid.EditInfoActivity">
+    tools:context="com.armhansa.app.cutepid.controller.EditInfoActivity">
 
     <TextView
         android:text="@string/edit_info"

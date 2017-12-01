@@ -1,4 +1,4 @@
-package com.armhansa.app.cutepid;
+package com.armhansa.app.cutepid.controller;
 
 import android.app.ProgressDialog;
 import android.support.design.widget.TabLayout;
@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.armhansa.app.cutepid.R;
 import com.armhansa.app.cutepid.fragment_home.ChatFragment;
 import com.armhansa.app.cutepid.fragment_home.HomeFragment;
 import com.armhansa.app.cutepid.fragment_home.ProfileFragment;
