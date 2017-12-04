@@ -43,5 +43,11 @@
     <string name="logout">Logout</string>
     <string name="your_gender">Your Gender</string>
     <string name="status2">Status</string>
+    <string name="credit">Credit</string>
+    <string name="creditIconApp">IconApp made by Freepik from www.flaticon.com</string>
+    <string name="creditLoginBG">Login Background made from EXO \'Sing For You\' album</string>
+    <string name="creditIconFilterSetting">Icon Filter Setting made by Copenhagen from www.iconfinder.com</string>
+    <string name="creditEditProfile">Icon Edit Info made by andré matiazzo from thenounproject.com</string>
+    <string name="endCredit">(Thanks a lots. I just use for my Education Project.)</string>
 
 </resources>

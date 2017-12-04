@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.armhansa.app.cutepid.controller.CreditActivity;
 import com.armhansa.app.cutepid.controller.EditInfoActivity;
 import com.armhansa.app.cutepid.controller.LoginActivity;
 import com.armhansa.app.cutepid.R;
@@ -32,7 +33,7 @@ public class ProfileFragment extends Fragment {
     View rootView;
 
     ImageView profileImage;
-    TextView firstName;
+    TextView firstName, credit;
 
     LinearLayout settingBtn, editInfoBtn;
 
@@ -54,6 +55,14 @@ public class ProfileFragment extends Fragment {
         profileImage = rootView.findViewById(R.id.profileImage);
 
         firstName = rootView.findViewById(R.id.firstName);
+        credit = rootView.findViewById(R.id.credit);
+        credit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToCreditPage = new Intent(getActivity(), CreditActivity.class);
+                startActivity(goToCreditPage);
+            }
+        });
         setValue();
 
         settingBtn = rootView.findViewById(R.id.settingBtn);

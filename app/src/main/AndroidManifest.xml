@@ -10,10 +10,11 @@
         android:icon="@drawable/heart"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:screenOrientation="portrait"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.LoginActivity"
+        <activity
+            android:name=".controller.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,15 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.HomeActivity"
+        <activity
+            android:name=".controller.HomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".controller.SetFilterActivity"
+        <activity
+            android:name=".controller.SetFilterActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".controller.EditInfoActivity"
+        <activity
+            android:name=".controller.EditInfoActivity"
             android:screenOrientation="portrait" />
-
-
-
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -51,6 +52,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".controller.CreditActivity"></activity>
     </application>
 
 </manifest>
